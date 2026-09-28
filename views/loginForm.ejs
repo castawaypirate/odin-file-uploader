@@ -7,12 +7,13 @@
     <!-- <link href="/css/form.css" rel="stylesheet"> -->
   </head>
   <body>
-    <%- include("partial/header.ejs")
+    <%- include("partial/header.ejs") %>
     <div class="content">
-      <form>
+      <form action="/login" method="POST">
+      <%- include("partial/errors.ejs") %>
         <div class="form-control">
           <label for="username">Username</label>
-          <input type="text" name="username" id="username" value="">
+          <input type="text" name="username" id="username" value="<%=locals.user ? user.username : ''%>">
         </div>
         <div class="form-control">
           <label for="password">Password</label>

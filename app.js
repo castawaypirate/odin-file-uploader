@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 import favicon from "serve-favicon";
 
 import indexRouter from "./routes/index.js";
+import "./config/passport.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
