@@ -1,16 +1,34 @@
 # backlog
+- folders/subfolders crud + folder navigation
+- upload file to folder/subfolder (filesystem) + file validation
+- upload file (cloudinary)
+- delete file
+- rename file
+- file details
+- shared folder
+- move file (optional)
+
+# done
 - registration + authentication + session
 - guarded dashboard
 - once authentication works see how all dependencies work together
 
-# done
-
 
 # target
 - [28/9] authentication system + session + first guarded routes
+- [29/9] folders crud + folder navigation
 
 # takeaways
-- [28/9]
+- [28/9]: 
+    - body parsing and session before routes
+    - passport.session() after session()
+    - serializeUser stores user id, deserializeUser rebuilds req.user on every request by querying the database
+    - @map() to connect or change name from schema.prisma field with database column and @@map() for the whole entity to table
+    - npx prisma migrate dev --name insert_name_here and npx prisma generate to create generated/prisma scripts after each migration
+    - select { username: true} to select field in prisma query
+    - passsport.authenticate(...) in the post login request and not req.login in order passport to call verifyCallback and check the password
+    - req.flash (from connect-flash) to pass messages while redirecting (login error messages for example)
+- [28/9]: 
 
 
 # structure

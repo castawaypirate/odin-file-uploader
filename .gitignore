@@ -4,6 +4,10 @@ node_modules/
 # Generated Prisma client (schema.prisma -> output = "../generated/prisma")
 /generated/prisma
 
+# Generated docs
+CODEBASE.md
+/scripts/
+
 # Environment variables — keep .env.example in version control
 .env
 .env.*
