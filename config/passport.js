@@ -11,12 +11,14 @@ const verifyCallback = async (req, username, password, done) => {
       },
     });
     if (!user) {
+      req.flash("username", username);
       return done(null, false, { message: "Incorrect username or password" });
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
+      req.flash("username", username);
       return done(null, false, { message: "Incorrect username or password" });
     }
 
@@ -37,6 +39,7 @@ passport.deserializeUser(async (userId, done) => {
   try {
     const user = await prisma.user.findUnique({
       select: {
+        id: true,
         username: true,
       },
       where: {

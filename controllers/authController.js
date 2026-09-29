@@ -10,7 +10,10 @@ export async function getRegisterForm(req, res) {
 }
 
 export async function getLoginForm(req, res) {
-  return res.render("loginForm");
+  return res.render("loginForm", {
+    errors: req.flash("error"),
+    username: req.flash("username")[0],
+  });
 }
 
 export const createUser = [
@@ -48,33 +51,18 @@ export const login = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .render("loginForm", { errors: errors.array(), user: req.body });
-    }
-
-    const user = matchedData(req);
-
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        username: user.username,
-      },
-    });
-
-    if (!existingUser) {
       return res.status(400).render("loginForm", {
-        errors: [{ msg: "Wrong username or password" }],
-        user: req.body,
+        errors: errors.array(),
+        username: req.body.username,
       });
     }
 
-    req.login({ id: existingUser.id }, function (err) {
-      if (!err) {
-        return res.redirect("/dashboard");
-      } else {
-        throw new Error(err);
-      }
+    const handler = passport.authenticate("local", {
+      successRedirect: "/dashboard",
+      failureRedirect: "/login",
+      failureFlash: true,
     });
+    handler(req, res, next);
   },
 ];
 

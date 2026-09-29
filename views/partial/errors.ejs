@@ -1,7 +1,7 @@
 <%if (locals.errors) { %>
 <ul>
   <% for (let error of errors) {%> 
-  <li><%=error.msg%></li>
+  <li><%=error.msg ? error.msg : error %></li>
   <%}%>
 </ul>
 <%}%>

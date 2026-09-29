@@ -6,7 +6,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import path from "path";
 import { fileURLToPath } from "url";
 import favicon from "serve-favicon";
-
+import flash from "connect-flash";
 import indexRouter from "./routes/index.js";
 import "./config/passport.js";
 
@@ -21,7 +21,9 @@ app.use(favicon(path.join(__dirname, "favicon.ico")));
 const staticPath = path.join(__dirname, "public");
 app.use(express.static(staticPath));
 
+// so this is used if client sends JSON payloads to backend
 app.use(express.json());
+// we need this because html forms send x-www-form-urlencoded back to backend and with this we parse it
 app.use(express.urlencoded({ extended: true }));
 
 // app.set("trust proxy", 1);
@@ -44,6 +46,8 @@ app.use(
     }),
   }),
 );
+
+app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
