@@ -16,15 +16,43 @@ model Session {
   id        String   @id
   sid       String   @unique
   data      String
-  expiresAt DateTime
+  expiresAt DateTime @map("expires_at")
 
   @@map("sessions")
 }
 
 model User {
-  id       String @id @default(uuid())
-  username String @unique
+  id       String   @id @default(uuid())
+  username String   @unique
   password String
+  folders  Folder[]
 
   @@map("users")
+}
+
+model Folder {
+  id             String   @id @default(uuid())
+  name           String
+  parentFolderId String?  @map("parent_folder_id")
+  parentFolder   Folder?  @relation("FolderSubfolders", fields: [parentFolderId], references: [id])
+  subfolders     Folder[] @relation("FolderSubfolders")
+  files          File[]
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @map("user_id")
+
+  @@index([userId])
+  @@map("folders")
+}
+
+model File {
+  id         String   @id @default(uuid())
+  filename   String
+  size       BigInt
+  path       String
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId   String   @map("folder_id")
+
+  @@index([folderId])
+  @@map("files")
 }

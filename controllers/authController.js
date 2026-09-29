@@ -33,6 +33,11 @@ export const createUser = [
       data: {
         username: user.username,
         password: hashedPassword,
+        folders: {
+          create: {
+            name: "/",
+          },
+        },
       },
     });
 
