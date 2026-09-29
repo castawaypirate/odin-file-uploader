@@ -1,6 +1,10 @@
 <header>
   <div>
-    <a href="/">Home</a>
+    <% if (locals.currentUser) {%>
+      <a href="/dashboard">Dashboard</a>
+    <%} else {%>
+      <a href="/">Home</a>
+    <%}%>
   </div>
   <div>
     <% if (locals.currentUser) {%>
