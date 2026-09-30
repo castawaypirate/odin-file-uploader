@@ -3,11 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/dashboardView.js" defer></script>
     <title>Dashboard</title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
     <div class="content">
+      <h1>Dashboard</h1>
       <%=currentUser.username%>
       <a href="/upload">Upload file</a>
       <a href="/folders/new">New folder</a>
@@ -17,7 +19,7 @@
         <li>
           <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
           <a href="">Edit</a>
-          <a href="">Delete</a>
+          <button class="delete-folder-button" type="button" data-id="<%=folder.id%>">Delete</button>
         </li>
       <%}%>
       </ul>

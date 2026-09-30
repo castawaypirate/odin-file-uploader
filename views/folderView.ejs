@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/js/folderView.js" defer></script>
     <title><%=locals.folder?.name%></title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
     <div class="content">
-      <%=locals.folder?.name%>
+      <h2><%=locals.folder?.name%></h2>
+      <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
+      <a href="">Edit</a>
+      <button type="button" id="delete-current-folder-btn">Delete</button>
+      <h3>Folders</h3>
+      <ul>
+        <% for (let folder of locals.folder?.subfolders) {%>
+        <li>
+          <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+          <a href="">Edit</a>
+          <button class="delete-subfolder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
+        </li>
+        <%}%>
+      </ul>
       <!-- <h3>Files</h3> -->
       <!-- <ul> -->
       <!-- </ul> -->
-      <a href=""></a>
     </div>
   </body>
 </html>

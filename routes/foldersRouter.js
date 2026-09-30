@@ -4,6 +4,7 @@ import {
   createFolder,
   getFolderForm,
   getFolderView,
+  deleteFolder,
 } from "../controllers/folderController.js";
 
 const foldersRouter = Router();
@@ -13,5 +14,7 @@ foldersRouter.get("/folders/new", getFolderForm);
 foldersRouter.post("/folders/new", createFolder);
 
 foldersRouter.get("/folders/:id", getFolderView);
+
+foldersRouter.delete("/folders/:id", deleteFolder);
 
 export default foldersRouter;

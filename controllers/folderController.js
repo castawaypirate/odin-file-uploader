@@ -145,3 +145,27 @@ export const getFolderView = [
     return res.render("folderView", { folder: folder });
   },
 ];
+
+export const deleteFolder = [
+  isAuthApi,
+  validateFolderParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ msg: "Invalid folder ID" });
+    }
+
+    const folderId = matchedData(req).id;
+    const folder = await prisma.folder.deleteMany({
+      where: {
+        id: folderId,
+      },
+    });
+
+    if (folder.count === 0) {
+      return res.status(401).json({ msg: "Folder was not found" });
+    }
+
+    return res.json({ msg: "Folder was deleted successfully" });
+  },
+];
