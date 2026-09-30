@@ -1,5 +1,6 @@
 import express from "express";
 import session from "express-session";
+import methodOverride from "method-override";
 import passport from "passport";
 import { prisma } from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
@@ -25,6 +26,8 @@ app.use(express.static(staticPath));
 app.use(express.json());
 // we need this because html forms send x-www-form-urlencoded back to backend and with this we parse it
 app.use(express.urlencoded({ extended: true }));
+
+app.use(methodOverride("_method"));
 
 // app.set("trust proxy", 1);
 

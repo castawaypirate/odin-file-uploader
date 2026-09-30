@@ -1,13 +1,13 @@
 import { validationResult, matchedData } from "express-validator";
 import { isAuth, isAuthApi } from "../middlewares/auth.js";
 import {
-  validateCreateFolder,
+  validateFolderForm,
   validateFolderParams,
   validateParentFolderQuery,
 } from "../middlewares/validator.js";
 import { prisma } from "../lib/prisma.js";
 
-export const getFolderForm = [
+export const getFolderCreateForm = [
   isAuth,
   validateParentFolderQuery,
   async (req, res) => {
@@ -41,7 +41,7 @@ export const getFolderForm = [
 
 export const createFolder = [
   isAuth,
-  validateCreateFolder,
+  validateFolderForm,
   validateParentFolderQuery,
   async (req, res) => {
     const errors = validationResult(req);
@@ -114,7 +114,84 @@ export const createFolder = [
       },
     });
 
-    return res.redirect(`/folders/${newFolder.id}`);
+    return res.redirect(`/folders/${parentFolder.id}`);
+  },
+];
+
+export const getFolderEditForm = [
+  isAuth,
+  validateFolderParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const requestedFolder = matchedData(req);
+    const folder = await prisma.folder.findFirst({
+      where: {
+        id: requestedFolder.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!folder) {
+      return res
+        .status(404)
+        .render("errorView", { errors: [{ msg: "Folder not found" }] });
+    }
+
+    return res.render("folderForm", {
+      folderName: folder.name,
+      action: `/folders/edit/${folder.id}?_method=PUT`,
+      edit: true,
+    });
+  },
+];
+
+export const editFolder = [
+  isAuth,
+  validateFolderForm,
+  validateFolderParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      if (errors.array().findIndex((x) => x.location === "param") > 0) {
+        return res.status(400).render("errorView", { errors: errors.array() });
+      }
+
+      return res.status(400).render("folderForm", {
+        errors: errors.array(),
+        folderName: req.body.name,
+        action: `/folders/edit/${req.params.id}?_method=PUT`,
+        edit: true,
+      });
+    }
+
+    const requestedFolder = matchedData(req);
+    const folder = await prisma.folder.findFirst({
+      where: {
+        id: requestedFolder.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!folder) {
+      return res
+        .status(404)
+        .render("errorView", { errors: [{ msg: "Folder not found" }] });
+    }
+
+    const updatedFolder = await prisma.folder.update({
+      where: {
+        id: requestedFolder.id,
+      },
+      data: {
+        name: requestedFolder.name,
+      },
+    });
+
+    return res.redirect(`/folders/${updatedFolder.parentFolderId}`);
   },
 ];
 

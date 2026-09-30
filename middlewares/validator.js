@@ -31,7 +31,7 @@ export const validateLogin = [
   body("password").notEmpty().withMessage("Password cannot be empty"),
 ];
 
-export const validateCreateFolder = [
+export const validateFolderForm = [
   body("name").trim().notEmpty().withMessage("Folder name cannot be emtpy"),
 ];
 
