@@ -18,8 +18,8 @@
       <% for (let folder of root.subfolders) {%>
         <li>
           <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
-          <a href="">Edit</a>
-          <button class="delete-folder-button" type="button" data-id="<%=folder.id%>">Delete</button>
+          <a href="/folders/edit/<%=folder.id%>">Edit</a>
+          <button class="delete-folder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
         </li>
       <%}%>
       </ul>

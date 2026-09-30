@@ -2,7 +2,7 @@
 - folders/subfolders crud + folder navigation
 - upload file to folder/subfolder (filesystem) + file validation
 - upload file (cloudinary)
-- delete file
+- delete file (maybe use dialog here to see the implementation)
 - rename file
 - file details
 - shared folder

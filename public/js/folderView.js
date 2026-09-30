@@ -1,48 +1,50 @@
-document
-  .querySelector("#delete-current-folder-btn")
-  .addEventListener("click", async () => {
-    try {
-      const folderId = window.location.href.split("/").reverse()[0];
-      const response = await fetch(`/folders/${folderId}`, {
-        method: "DELETE",
-      });
+const deleteCurrentFolderBtn = document.querySelector(
+  "#delete-current-folder-btn",
+);
 
-      const result = await response.json();
-      console.log(result);
-
-      if (response.status === 200) {
-        window.location.href = "/dashboard";
-      } else {
-        document.querySelector("#content").innerHTML =
-          `<div>${result.msg}</div>`;
-      }
-    } catch (err) {
-      throw new Error(err);
-    }
+if (deleteCurrentFolderBtn) {
+  deleteCurrentFolderBtn.addEventListener("click", () => {
+    deleteFolder(deleteCurrentFolderBtn);
   });
+}
 
 const deleteFolderButtons = document.querySelectorAll(".delete-subfolder-btn");
 
 for (let button of deleteFolderButtons) {
-  button.addEventListener("click", async () => {
-    try {
-      const folderId = button.dataset.id;
-      const response = await fetch(`/folders/${folderId}`, {
-        method: "DELETE",
-      });
-
-      const result = await response.json();
-      console.log(result);
-
-      if (response.status === 200) {
-        window.location.href = "/dashboard";
-      } else {
-        const message = document.createElement("div");
-        message.textContent = result.msg;
-        button.parentNode.appendChild(message);
-      }
-    } catch (err) {
-      throw new Error(err);
-    }
+  button.addEventListener("click", () => {
+    deleteFolder(button);
   });
+}
+
+async function deleteFolder(button) {
+  button.disabled = true;
+  try {
+    const folderId = button.dataset.id;
+    const response = await fetch(`/folders/${folderId}`, {
+      method: "DELETE",
+    });
+
+    if (response.status === 200) {
+      const result = await response.json();
+      window.location.href = `/folders/${result.parentFolderId}`;
+      return;
+    }
+
+    if (response.status === 401) {
+      window.location.href = "/login";
+      return;
+    }
+
+    if ([400, 403, 404].includes(response.status)) {
+      const result = await response.json();
+      window.alert(result.msg);
+    } else {
+      window.alert("Something went wrong");
+    }
+  } catch (err) {
+    console.error(err);
+    window.alert("Something went wrong");
+  }
+
+  button.disabled = false;
 }
