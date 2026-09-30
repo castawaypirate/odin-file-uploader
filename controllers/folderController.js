@@ -217,7 +217,10 @@ export const getFolderView = [
     if (!folder || folder.userId !== req.user.id) {
       return res
         .status(404)
-        .render("folderView", { error: [{ msg: "Folder not found" }] });
+        .render("folderView", { errors: [{ msg: "Folder not found" }] });
+    }
+    if (folder.parentFolderId === null) {
+      return res.redirect("/dashboard");
     }
     return res.render("folderView", { folder: folder });
   },
@@ -233,16 +236,39 @@ export const deleteFolder = [
     }
 
     const folderId = matchedData(req).id;
-    const folder = await prisma.folder.deleteMany({
+
+    const folderToDelete = await prisma.folder.findFirst({
       where: {
         id: folderId,
+        userId: req.user.id,
       },
     });
 
-    if (folder.count === 0) {
-      return res.status(401).json({ msg: "Folder was not found" });
+    if (!folderToDelete) {
+      return res.status(404).json({ msg: "Folder was not found" });
     }
 
-    return res.json({ msg: "Folder was deleted successfully" });
+    if (folderToDelete.parentFolderId === null) {
+      return res
+        .status(403)
+        .json({ msg: "You are not allowed to perform this action" });
+    }
+
+    const folder = await prisma.folder.deleteMany({
+      where: {
+        id: folderId,
+        userId: req.user.id,
+      },
+    });
+
+    // a little bit redundant
+    if (folder.count === 0) {
+      return res.status(404).json({ msg: "Folder was not found" });
+    }
+
+    return res.json({
+      msg: "Folder was deleted successfully",
+      parentFolderId: folderToDelete.parentFolderId,
+    });
   },
 ];

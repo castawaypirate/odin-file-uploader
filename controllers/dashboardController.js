@@ -14,7 +14,6 @@ export const getDashboardView = [
         subfolders: true,
       },
     });
-    console.log(rootFolder);
     return res.render("dashboardView", { root: rootFolder });
   },
 ];
