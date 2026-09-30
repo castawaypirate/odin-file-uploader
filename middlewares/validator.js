@@ -31,41 +31,17 @@ export const validateLogin = [
   body("password").notEmpty().withMessage("Password cannot be empty"),
 ];
 
-export const validateFolder = [
-  body("name")
-    .trim()
-    .notEmpty()
-    .withMessage("Folder name cannot be emtpy")
-    .custom(async (value, { req }) => {
-      let parentFolder;
-      if (req.query.parentFolderId) {
-        parentFolder = await prisma.folder.findUnique({
-          where: {
-            id: req.query.parentFolderId,
-          },
-          include: {
-            subfolders: true,
-          },
-        });
-      } else {
-        parentFolder = await prisma.folder.findFirst({
-          where: {
-            name: "/",
-            parentFolderId: null,
-          },
-          include: {
-            subfolders: true,
-          },
-        });
-      }
-      if (parentFolder.subfolders.find((x) => x.name === value)) {
-        throw new Error(
-          "A folder with this name already exists in this location",
-        );
-      }
-      req.resolvedParentFolder = parentFolder;
-      return true;
-    }),
+export const validateCreateFolder = [
+  body("name").trim().notEmpty().withMessage("Folder name cannot be emtpy"),
 ];
 
-export const validateFolderParams = [param("id").isUUID()];
+export const validateParentFolderQuery = [
+  query("parentFolderId")
+    .optional()
+    .isUUID()
+    .withMessage("Invalid parent folder ID"),
+];
+
+export const validateFolderParams = [
+  param("id").isUUID().withMessage("Invalid folder ID"),
+];

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Error</title>
+  </head>
+  <body>
+    <%- include("partial/header.ejs") %>
+    <div class="content">
+      <% for (let error of locals.errors) { %>
+      <div>
+         <%=error.msg%> 
+      </div>
+      <%}%>
+    </div>
+  </body>
+</html>
