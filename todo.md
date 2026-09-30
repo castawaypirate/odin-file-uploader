@@ -16,7 +16,8 @@
 
 # target
 - [28/9] authentication system + session + first guarded routes
-- [29/9] folders crud + folder navigation
+- [29/9] folders create and delete
+- [30/9] subfolders creation + navigation
 
 # takeaways
 - [28/9]: 
@@ -28,7 +29,12 @@
     - select { username: true} to select field in prisma query
     - passsport.authenticate(...) in the post login request and not req.login in order passport to call verifyCallback and check the password
     - req.flash (from connect-flash) to pass messages while redirecting (login error messages for example)
-- [28/9]: 
+- [29/9]: 
+    - validator should check if data is correct, controller checks ownership
+    - post with bad data -> re-render, get with malformed query -> render/redirect to error page
+    - firstUnique needs unique values to database query
+    - controller should not depend on side quests of the validator (e.g. req.resolvedParentFolder = parentFolder)
+    - you can inspect the validator's error array to see where the error came from
 
 
 # structure
