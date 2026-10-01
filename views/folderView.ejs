@@ -10,6 +10,13 @@
   <body>
     <%- include("partial/header.ejs") %>
     <div class="content">
+      <div class="path">
+        <a href="/dashboard">~</a>
+        <%for (let folder of path) {%>
+        <span>/</span>
+        <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+        <%}%>
+      </div>
       <h2><%=locals.folder?.name%></h2>
       <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
       <a href="/folders/edit/<%=locals.folder?.id%>?context=current">Edit</a>

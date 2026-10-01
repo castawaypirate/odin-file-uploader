@@ -232,10 +232,19 @@ export const getFolderView = [
         .status(404)
         .render("folderView", { errors: [{ msg: "Folder not found" }] });
     }
+
     if (folder.parentFolderId === null) {
       return res.redirect("/dashboard");
     }
-    return res.render("folderView", { folder: folder });
+
+    const path =
+      await prisma.$queryRaw`SELECT * FROM get_folder_path(${folder.id})`;
+    path.pop();
+
+    return res.render("folderView", {
+      folder: folder,
+      path: path.reverse(),
+    });
   },
 ];
 
