@@ -42,6 +42,10 @@ export const validateParentFolderQuery = [
     .withMessage("Invalid parent folder ID"),
 ];
 
+export const sanitizeContextQuery = [
+  query("context").optional().trim().escape(),
+];
+
 export const validateFolderParams = [
   param("id").isUUID().withMessage("Invalid folder ID"),
 ];

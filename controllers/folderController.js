@@ -4,6 +4,7 @@ import {
   validateFolderForm,
   validateFolderParams,
   validateParentFolderQuery,
+  sanitizeContextQuery,
 } from "../middlewares/validator.js";
 import { prisma } from "../lib/prisma.js";
 
@@ -121,6 +122,7 @@ export const createFolder = [
 export const getFolderEditForm = [
   isAuth,
   validateFolderParams,
+  sanitizeContextQuery,
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -141,9 +143,15 @@ export const getFolderEditForm = [
         .render("errorView", { errors: [{ msg: "Folder not found" }] });
     }
 
+    let action = `/folders/edit/${folder.id}?_method=PUT`;
+
+    if (requestedFolder.context === "current") {
+      action += "&context=current";
+    }
+
     return res.render("folderForm", {
       folderName: folder.name,
-      action: `/folders/edit/${folder.id}?_method=PUT`,
+      action: action,
       edit: true,
     });
   },
@@ -153,6 +161,7 @@ export const editFolder = [
   isAuth,
   validateFolderForm,
   validateFolderParams,
+  sanitizeContextQuery,
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -190,6 +199,10 @@ export const editFolder = [
         name: requestedFolder.name,
       },
     });
+
+    if (requestedFolder.context === "current") {
+      return res.redirect(`/folders/${updatedFolder.id}`);
+    }
 
     return res.redirect(`/folders/${updatedFolder.parentFolderId}`);
   },

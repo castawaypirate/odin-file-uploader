@@ -12,7 +12,7 @@
     <div class="content">
       <h2><%=locals.folder?.name%></h2>
       <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
-      <a href="/folders/edit/<%=locals.folder?.id%>">Edit</a>
+      <a href="/folders/edit/<%=locals.folder?.id%>?context=current">Edit</a>
       <button type="button" data-id="<%=locals?.folder.id%>" id="delete-current-folder-btn">Delete</button>
       <h3>Folders</h3>
       <ul>
