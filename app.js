@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverride("_method"));
 
-// app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -38,6 +38,8 @@ app.use(
   session({
     cookie: {
       maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
     },
     secret: process.env.COOKIE_SECRET,
     resave: false,
