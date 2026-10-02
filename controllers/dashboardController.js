@@ -8,12 +8,14 @@ export const getDashboardView = [
       where: {
         name: "/",
         parentFolderId: null,
+        userId: req.userId,
       },
       include: {
         files: true,
         subfolders: true,
       },
     });
-    return res.render("dashboardView", { root: rootFolder });
+    const errors = req.flash("error");
+    return res.render("dashboardView", { root: rootFolder, errors: errors });
   },
 ];

@@ -214,23 +214,25 @@ export const getFolderView = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render("folderView", { errors: errors.array() });
+      return res.status(400).render("errorView", { errors: errors.array() });
     }
 
     const requestedFolder = matchedData(req);
     const folder = await prisma.folder.findUnique({
       where: {
         id: requestedFolder.id,
+        userId: req.user.id,
       },
       include: {
         subfolders: true,
+        files: true,
       },
     });
 
-    if (!folder || folder.userId !== req.user.id) {
+    if (!folder) {
       return res
         .status(404)
-        .render("folderView", { errors: [{ msg: "Folder not found" }] });
+        .render("errorView", { errors: [{ msg: "Folder not found" }] });
     }
 
     if (folder.parentFolderId === null) {
@@ -241,9 +243,12 @@ export const getFolderView = [
       await prisma.$queryRaw`SELECT * FROM get_folder_path(${folder.id})`;
     path.pop();
 
+    const fileFormErrors = req.flash("error");
+
     return res.render("folderView", {
       folder: folder,
       path: path.reverse(),
+      errors: fileFormErrors,
     });
   },
 ];
