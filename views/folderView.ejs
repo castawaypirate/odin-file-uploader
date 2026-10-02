@@ -12,28 +12,20 @@
     <div class="content">
       <div class="path">
         <a href="/dashboard">~</a>
-        <%for (let folder of path) {%>
-        <span>/</span>
-        <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+        <% if (locals.path) {%>
+          <%for (let folder of path) {%>
+            <span>/</span>
+            <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+          <%}%>
         <%}%>
       </div>
       <h2><%=locals.folder?.name%></h2>
       <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
       <a href="/folders/edit/<%=locals.folder?.id%>?context=current">Edit</a>
-      <button type="button" data-id="<%=locals?.folder.id%>" id="delete-current-folder-btn">Delete</button>
-      <h3>Folders</h3>
-      <ul>
-        <% for (let folder of locals.folder?.subfolders) {%>
-        <li>
-          <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
-          <a href="/folders/edit/<%=folder.id%>">Edit</a>
-          <button class="delete-subfolder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
-        </li>
-        <%}%>
-      </ul>
-      <!-- <h3>Files</h3> -->
-      <!-- <ul> -->
-      <!-- </ul> -->
+      <button type="button" data-id="<%=locals.folder?.id%>" id="delete-current-folder-btn">Delete</button>
+      <%- include("partial/folders.ejs", {subfolders: locals.folder?.subfolders}) %>
+      <%- include("partial/files.ejs", {files: locals.folder?.files, context: locals.folder?.id}) %>
+      <%- include("partial/uploadForm.ejs", {context: locals.folder?.id}) %>
     </div>
   </body>
 </html>

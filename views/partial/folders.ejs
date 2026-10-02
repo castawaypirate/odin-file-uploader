@@ -1,0 +1,14 @@
+<h3>Folders</h3>
+<ul>
+  <% if (subfolders && subfolders.length > 0) {%>
+    <% for (let folder of subfolders) {%>
+      <li>
+        <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+        <a href="/folders/edit/<%=folder.id%>">Edit</a>
+        <button class="delete-subfolder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
+      </li>
+    <%}%>
+  <%} else {%>
+    <p>No subfolders yet</p>
+  <%}%>
+</ul>

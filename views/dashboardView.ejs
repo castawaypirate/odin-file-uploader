@@ -13,16 +13,9 @@
       <%=currentUser.username%>
       <a href="/upload">Upload file</a>
       <a href="/folders/new">New folder</a>
-      <h3>Folders</h3>
-      <ul>
-      <% for (let folder of root.subfolders) {%>
-        <li>
-          <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
-          <a href="/folders/edit/<%=folder.id%>">Edit</a>
-          <button class="delete-folder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
-        </li>
-      <%}%>
-      </ul>
+      <%- include("partial/folders.ejs", {subfolders: root.subfolders}) %>
+      <%- include("partial/files.ejs", {files: root.files, context: "root"}) %>
+      <%- include("partial/uploadForm.ejs", {context: "root"}) %>
     </div>
   </body>
 </html>

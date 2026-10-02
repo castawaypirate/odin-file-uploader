@@ -1,4 +1,4 @@
-const deleteFolderButtons = document.querySelectorAll(".delete-folder-btn");
+const deleteFolderButtons = document.querySelectorAll(".delete-subfolder-btn");
 
 for (let button of deleteFolderButtons) {
   button.addEventListener("click", async () => {
