@@ -8,6 +8,10 @@ node_modules/
 CODEBASE.md
 /scripts/
 
+# User uploads (runtime content)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
 # Environment variables — keep .env.example in version control
 .env
 .env.*
