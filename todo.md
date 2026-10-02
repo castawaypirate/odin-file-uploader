@@ -7,6 +7,7 @@
 - shared folder
 - move file (optional)
 - move folder (optional)
+- replace/overwrite file (optional)
 
 # done
 - folders/subfolders crud + folder navigation
@@ -20,6 +21,7 @@
 - [29/9] folders create and delete
 - [30/9] subfolders creation
 - [1/10] subfolder navigation
+- [2/10] upload file to folder (filesystem) + error handling
 
 # takeaways
 - [28/9]: 
@@ -47,6 +49,12 @@
     - to get nested entities from the database you may use materilized paths with is a field on the model that holds the current path as a string value or use recursive CTEs (common table expressions) which is a reqursive query that is strored in a stored procedure for example when you use prisma because prisma doesnt support neither
     - session lives on the databse (redis, postgres) and uses cookies' connect.sid to return its connect on each request - cookies are stored in browser
     - redux = state management for react and dies on refresh
+    [1/10] :
+    - stored procedures are for inserting or updating, and functions are for selecting
+    - we used RETURNS TABLE for the function signature and RETURN QUERY inside the BEGIN...END to tell psql to execute the query
+    - WITH RECURSIVE path AS (...UNION/UNION ALL...) SELECT * FROM path --> for the recursive cte query
+    - inside $queryRaw we had to SELECT * FROM get_folder_path(...) (we couldn't do SELECT get_folder_path(...) although in works inside psql) otherwise what was returned could not be serialized (an entity 'record') by prisma
+    - for file upload checks we have to do them in middlewares before hitting the controller or validator - we needed an upload.js as middleware where we initialize multer and then an error handling middleware in the route level before hittint the controller
 
 
 # structure
