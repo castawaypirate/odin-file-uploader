@@ -1,15 +1,17 @@
 # backlog
-- upload file to folder/subfolder (filesystem) + file validation
-- upload file (cloudinary)
-- delete file (maybe use dialog here to see the implementation)
-- rename file
 - file details
+- download
+- rename file (use dialog)
+- upload file (cloudinary)
+- delete file (cloudinary)
 - shared folder
 - move file (optional)
 - move folder (optional)
 - replace/overwrite file (optional)
 
 # done
+- delete file (maybe use dialog here to see the implementation)
+- upload file to folder/subfolder (filesystem) + file validation
 - folders/subfolders crud + folder navigation
 - registration + authentication + session
 - guarded dashboard
@@ -22,6 +24,7 @@
 - [30/9] subfolders creation
 - [1/10] subfolder navigation
 - [2/10] upload file to folder (filesystem) + error handling
+- [3/10] delete file (database + filesystem)
 
 # takeaways
 - [28/9]: 
@@ -49,12 +52,19 @@
     - to get nested entities from the database you may use materilized paths with is a field on the model that holds the current path as a string value or use recursive CTEs (common table expressions) which is a reqursive query that is strored in a stored procedure for example when you use prisma because prisma doesnt support neither
     - session lives on the databse (redis, postgres) and uses cookies' connect.sid to return its connect on each request - cookies are stored in browser
     - redux = state management for react and dies on refresh
-    [1/10] :
+- [1/10]:
     - stored procedures are for inserting or updating, and functions are for selecting
     - we used RETURNS TABLE for the function signature and RETURN QUERY inside the BEGIN...END to tell psql to execute the query
     - WITH RECURSIVE path AS (...UNION/UNION ALL...) SELECT * FROM path --> for the recursive cte query
     - inside $queryRaw we had to SELECT * FROM get_folder_path(...) (we couldn't do SELECT get_folder_path(...) although in works inside psql) otherwise what was returned could not be serialized (an entity 'record') by prisma
-    - for file upload checks we have to do them in middlewares before hitting the controller or validator - we needed an upload.js as middleware where we initialize multer and then an error handling middleware in the route level before hittint the controller
+    - for file upload checks we have to do them in middlewares before hitting the controller or validator - we needed an upload.js as middleware where we initialize multer and then an error handling middleware in the route level before hitting the controller
+ - [2/10]:
+    - in file validation first you see for extension and if it is invalid you return error so you dont have to upload the whole file and then return the error - so you get only on error at a time for the file and not a list of errors
+    - filefilter reads metadata from the file before uploading
+    - we dont use express-validator for the file because it will upload the file first to validate it
+    - the fileRouter middleware that handles file validation should redirect in case of error 
+    - delete file dialog form should use query params to redirect the user correctly with context after deletion
+    - put dialog outside ejs for and pass the files details needed for the delete request via javascript
 
 
 # structure
