@@ -5,21 +5,22 @@ import passport from "passport";
 import { prisma } from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import path from "path";
-import { fileURLToPath } from "url";
+// import { fileURLToPath } from "url";
 import favicon from "serve-favicon";
 import flash from "connect-flash";
 import indexRouter from "./routes/index.js";
 import "./config/passport.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 8000;
 
-app.use(favicon(path.join(__dirname, "favicon.ico")));
+app.use(favicon(path.join(import.meta.dirname, "favicon.ico")));
 
-const staticPath = path.join(__dirname, "public");
+// const staticPath = path.join(__dirname, "public");
+const staticPath = path.join(import.meta.dirname, "public");
 app.use(express.static(staticPath));
 
 // so this is used if client sends JSON payloads to backend
@@ -31,7 +32,8 @@ app.use(methodOverride("_method"));
 
 app.set("trust proxy", 1);
 
-app.set("views", path.join(__dirname, "views"));
+// app.set("views", path.join(__dirname, "views"));
+app.set("views", path.join(import.meta.dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(
