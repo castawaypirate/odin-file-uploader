@@ -26,6 +26,7 @@ model User {
   username String   @unique
   password String
   folders  Folder[]
+  files    File[]
 
   @@map("users")
 }
@@ -53,6 +54,10 @@ model File {
   folder     Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId   String   @map("folder_id")
 
-  @@index([folderId])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  @@index([folderId, userId])
+  @@index([userId])
   @@map("files")
 }

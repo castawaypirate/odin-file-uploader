@@ -45,6 +45,7 @@ export const uploadFile = [
         path: req.file.path.replace("public", ""),
         size: req.file.size,
         folderId: folder.id,
+        userId: req.user.id,
       },
     });
 
