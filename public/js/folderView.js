@@ -48,3 +48,15 @@ async function deleteFolder(button) {
 
   button.disabled = false;
 }
+
+const deleteFileButtons = document.querySelectorAll(".delete-file-btn");
+
+for (let button of deleteFileButtons) {
+  button.addEventListener("click", () => {
+    const dialog = document.querySelector("#delete-file-dialog");
+    const deleteFileForm = dialog.querySelector("form");
+    deleteFileForm.action = `/files/${button.dataset.fileId}?_method=DELETE&context=${button.dataset.context}`;
+
+    dialog.showModal();
+  });
+}

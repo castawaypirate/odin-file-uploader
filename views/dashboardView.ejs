@@ -10,8 +10,7 @@
     <%- include("partial/header.ejs") %>
     <div class="content">
       <h1>Dashboard</h1>
-      <%=currentUser.username%>
-      <a href="/upload">Upload file</a>
+      <div>Hello, <%=currentUser.username%></div>
       <a href="/folders/new">New folder</a>
       <%- include("partial/folders.ejs", {subfolders: root.subfolders}) %>
       <%- include("partial/files.ejs", {files: root.files, context: "root"}) %>

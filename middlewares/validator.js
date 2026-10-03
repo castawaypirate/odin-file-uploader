@@ -49,3 +49,7 @@ export const sanitizeContextQuery = [
 export const validateFolderParams = [
   param("id").isUUID().withMessage("Invalid folder ID"),
 ];
+
+export const validateFileParams = [
+  param("id").isUUID().withMessage("Invalid file ID"),
+];

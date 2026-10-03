@@ -1,16 +1,16 @@
-import { matchedData } from "express-validator";
+import { matchedData, validationResult } from "express-validator";
+import * as mod from "node:fs/promises";
+import path from "node:path";
 import { prisma } from "../lib/prisma.js";
-import { sanitizeContextQuery } from "../middlewares/validator.js";
+import {
+  sanitizeContextQuery,
+  validateFileParams,
+} from "../middlewares/validator.js";
 
 export const uploadFile = [
   sanitizeContextQuery,
   async (req, res) => {
-    if (!req.file) {
-      req.flash("error", "Please select a file to upload");
-    }
-
     const context = matchedData(req).context;
-
     let folder;
     if (context === "root") {
       folder = await prisma.folder.findFirst({
@@ -57,4 +57,82 @@ export const uploadFile = [
   },
 ];
 
-export const deleteFile = [async (req, res) => {}];
+export const deleteFile = [
+  validateFileParams,
+  sanitizeContextQuery,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const file = matchedData(req);
+
+    const fileToDelete = await prisma.file.findFirst({
+      where: {
+        id: file.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!fileToDelete) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "File not found" }],
+      });
+    }
+
+    const fileDeleted = await prisma.file.deleteMany({
+      where: {
+        id: fileToDelete.id,
+        userId: req.user.id,
+      },
+    });
+
+    // a little bit redundant
+    if (fileDeleted.count === 0) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "File not found" }],
+      });
+    }
+
+    try {
+      let filePath = path.join(process.cwd(), "public", fileToDelete.path);
+      await mod.unlink(filePath);
+    } catch (err) {
+      console.error(err);
+    }
+
+    if (file.context === "root") {
+      return res.redirect("/dashboard");
+    }
+
+    return res.redirect(`/folders/${fileToDelete.folderId}`);
+  },
+];
+
+export const getFileDetails = [
+  validateFileParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const fileId = matchedData(req).id;
+
+    const file = await prisma.file.findFirst({
+      where: {
+        id: fileId,
+        userId: req.user.id,
+      },
+    });
+
+    if (!file) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "File not found" }],
+      });
+    }
+
+    return res.render("fileDetailsView", { file: file });
+  },
+];

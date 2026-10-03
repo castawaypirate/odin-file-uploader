@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { upload } from "../middlewares/upload.js";
-import { uploadFile, deleteFile } from "../controllers/fileController.js";
+import {
+  uploadFile,
+  deleteFile,
+  getFileDetails,
+} from "../controllers/fileController.js";
 
 const filesRouter = Router();
 
@@ -15,6 +19,16 @@ filesRouter.use((err, req, res, next) => {
     } else {
       req.flash("error", "Upload failed");
     }
+    console.error(err);
+    if (req.query.context === "root") {
+      return res.redirect("/dashboard");
+    } else {
+      return res.redirect(`/folders/${req.query.context}`);
+    }
+  }
+
+  if (!req.file) {
+    req.flash("error", "Please select a file to upload");
     if (req.query.context === "root") {
       return res.redirect("/dashboard");
     } else {
@@ -25,6 +39,8 @@ filesRouter.use((err, req, res, next) => {
   next(err);
 });
 
-filesRouter.delete("/delete/:id", deleteFile);
+filesRouter.get("/files/:id", getFileDetails);
+
+filesRouter.delete("/files/:id", deleteFile);
 
 export default filesRouter;

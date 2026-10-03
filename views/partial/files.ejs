@@ -1,17 +1,17 @@
 <h3>Files</h3>
+<dialog id="delete-file-dialog">
+  <form method="POST">
+    <p>Are you sure?</p>
+    <button commandfor="delete-file-dialog" command="close" type="submit">Delete</button>
+  </form>
+</dialog>
 <ul>
   <% if (files && files.length > 0) {%>
     <% for (let file of files) {%>
       <li>
-        <dialog id="delete-file-dialog">
-          <form action="/files/<%=file.id%>?context=<%=context%>">
-            <p>Are you sure?</p>
-            <button commandfor="delete-file-dialog" command="close" type="submit">Delete</button>
-          </form>
-        </dialog>
         <a href="/files/<%=file.id%>"><%=file.filename%></a>
         <button type="button">Edit</button>
-        <button commandfor="delete-file-dialog" command="show-modal" class="delete-file-btn" type="button" data-id="<%=file.id%>">Delete</button>
+        <button class="delete-file-btn" type="button" data-context="<%=context%>" data-file-id="<%=file.id%>">Delete</button>
       </li>
     <%}%>
   <%} else {%>
