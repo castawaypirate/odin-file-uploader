@@ -25,6 +25,7 @@
 - [1/10] subfolder navigation
 - [2/10] upload file to folder (filesystem) + error handling
 - [3/10] delete file (database + filesystem)
+- [4/10] file details
 
 # takeaways
 - [28/9]: 
@@ -65,6 +66,9 @@
     - the fileRouter middleware that handles file validation should redirect in case of error 
     - delete file dialog form should use query params to redirect the user correctly with context after deletion
     - put dialog outside ejs for and pass the files details needed for the delete request via javascript
+- [3/10]:
+    - using a foreign key's field name to assign a value and establish a connect in prisma is totally vadid and you don't have to use connect (connect is better for many to many)
+    - import.meta.dirname and process.cwd() are the modern ways to get the pathname of the directory in node 
 
 
 # structure
