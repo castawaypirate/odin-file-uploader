@@ -17,6 +17,7 @@
     "@quixo3/prisma-session-store": "^3.1.21",
     "bcryptjs": "^3.0.3",
     "connect-flash": "^0.1.1",
+    "date-fns": "^4.4.0",
     "dotenv": "^18.0.4",
     "ejs": "^6.0.1",
     "express": "^5.2.1",

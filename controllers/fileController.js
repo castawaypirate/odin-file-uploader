@@ -1,7 +1,9 @@
 import { matchedData, validationResult } from "express-validator";
+import { format } from "date-fns";
 import * as mod from "node:fs/promises";
 import path from "node:path";
 import { prisma } from "../lib/prisma.js";
+import { formatBytes } from "../lib/utils.js";
 import {
   sanitizeContextQuery,
   validateFileParams,
@@ -132,6 +134,9 @@ export const getFileDetails = [
         errors: [{ msg: "File not found" }],
       });
     }
+
+    file.size = formatBytes(Number(file.size));
+    file.uploadedAt = format(new Date(file.uploadedAt), "dd-MM-yyyy");
 
     return res.render("fileDetailsView", { file: file });
   },
