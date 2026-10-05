@@ -15,6 +15,7 @@ export const getDashboardView = [
         subfolders: true,
       },
     });
+
     const errors = req.flash("error");
     return res.render("dashboardView", { root: rootFolder, errors: errors });
   },

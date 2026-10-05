@@ -1,3 +1,23 @@
+// const downloadFileButtons = document.querySelectorAll(".download-file-btn");
+//
+// for (let button of downloadFileButtons) {
+//   button.addEventListener("click", async () => {
+//     button.disabled = true;
+//     try {
+//       const response = await fetch(`/download/${button.dataset.fileId}`, {
+//         method: "GET",
+//       });
+//       if (response.status === 200) {
+//         window.open(response.url);
+//       }
+//     } catch (err) {
+//       console.error(err);
+//     }
+//
+//     button.disabled = false;
+//   });
+// }
+
 const deleteFolderButtons = document.querySelectorAll(".delete-subfolder-btn");
 
 for (let button of deleteFolderButtons) {

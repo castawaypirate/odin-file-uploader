@@ -1,5 +1,4 @@
 # backlog
-- file details
 - download
 - rename file (use dialog)
 - upload file (cloudinary)
@@ -10,6 +9,7 @@
 - replace/overwrite file (optional)
 
 # done
+- file details
 - delete file (maybe use dialog here to see the implementation)
 - upload file to folder/subfolder (filesystem) + file validation
 - folders/subfolders crud + folder navigation
@@ -26,6 +26,7 @@
 - [2/10] upload file to folder (filesystem) + error handling
 - [3/10] delete file (database + filesystem)
 - [4/10] file details
+- [5/10] download file
 
 # takeaways
 - [28/9]: 
@@ -60,9 +61,10 @@
     - inside $queryRaw we had to SELECT * FROM get_folder_path(...) (we couldn't do SELECT get_folder_path(...) although in works inside psql) otherwise what was returned could not be serialized (an entity 'record') by prisma
     - for file upload checks we have to do them in middlewares before hitting the controller or validator - we needed an upload.js as middleware where we initialize multer and then an error handling middleware in the route level before hitting the controller
  - [2/10]:
-    - in file validation first you see for extension and if it is invalid you return error so you dont have to upload the whole file and then return the error - so you get only on error at a time for the file and not a list of errors
-    - filefilter reads metadata from the file before uploading
-    - we dont use express-validator for the file because it will upload the file first to validate it
+    - file validation should not be done with express validator because the file is validated after it has been uploaded
+    - file validation is done using the multer options properties (you can check file size using limits property or add a custom fileFilter function)
+    - fileFilter function is executed before limits, uses the file's metadata for the checks and if the file doesnt meet requirement it instantly rejects - then it calls cb function (which means callback) that recieves error as first argument and and a boolean for acceptance as the second argument - then the multer source code function like single calls next (which you can't see it but it is inside the functions implementation in the library) which then is caught by the next error handling middleware (which is inside the fileRouter.js) which adds the error to the flash message and redirects
+    - limits.fileSize property starts counting the bytes of the file once the server start downloading it and it stops its if it exceeds the limit calling next and going again to the middleware function - and that is why you cannot have both errors displaying with one failed upload request
     - the fileRouter middleware that handles file validation should redirect in case of error 
     - delete file dialog form should use query params to redirect the user correctly with context after deletion
     - put dialog outside ejs for and pass the files details needed for the delete request via javascript
