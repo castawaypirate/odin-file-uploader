@@ -7,6 +7,7 @@ import { formatBytes } from "../lib/utils.js";
 import {
   sanitizeContextQuery,
   validateFileParams,
+  validateFilename,
 } from "../middlewares/validator.js";
 
 export const uploadFile = [
@@ -99,6 +100,46 @@ export const downloadFile = [
         console.error(err);
       }
     });
+  },
+];
+
+export const updateFile = [
+  validateFileParams,
+  sanitizeContextQuery,
+  validateFilename,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const file = matchedData(req);
+
+    const fileToUpdate = await prisma.file.findFirst({
+      where: {
+        id: file.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!fileToUpdate) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "File not found" }],
+      });
+    }
+
+    await prisma.file.update({
+      where: {
+        id: fileToUpdate.id,
+      },
+      data: { filename: `${file.filename}.${fileToUpdate.filetype}` },
+    });
+
+    if (file.context === "root") {
+      return res.redirect("/dashboard");
+    }
+
+    return res.redirect(`/folders/${fileToUpdate.folderId}`);
   },
 ];
 

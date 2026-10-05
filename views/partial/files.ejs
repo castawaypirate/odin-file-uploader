@@ -6,14 +6,24 @@
     <button commandfor="delete-file-dialog" command="close" type="button">Close</button>
   </form>
 </dialog>
+<dialog id="edit-file-dialog">
+  <form method="POST">
+    <div class="form-control">
+      <label for="filename">Name</label>
+      <input type="text" id="filename" name="filename">
+    </div>
+    <button commandfor="edit-file-dialog" command="close" type="submit">Update</button>
+    <button commandfor="edit-file-dialog" command="close" type="button">Close</button>
+  </form>
+</dialog>
 <ul>
   <% if (files && files.length > 0) {%>
     <% for (let file of files) {%>
       <li>
         <a href="/files/<%=file.id%>"><%=file.filename%></a>
-        <button class="download-file-btn" type="button" data-file-id="<%=file.id%>"><a href="/download/<%=file.id%>">Download</a></button>
-        <button type="button">Edit</button>
-        <button class="delete-file-btn" type="button" data-context="<%=context%>" data-file-id="<%=file.id%>">Delete</button>
+        <button class="download-file-btn" type="button"><a href="/download/<%=file.id%>">Download</a></button>
+        <button class="edit-file-btn" type="button" data-context="<%=context%>" data-file-id="<%=file.id%>" data-filename="<%=file.filename%>">Edit</button>
+        <button class="delete-file-btn" type="button" data-context="<%=context%>" data-file-id="<%=file.id%>" >Delete</button>
       </li>
     <%}%>
   <%} else {%>

@@ -53,3 +53,16 @@ export const validateFolderParams = [
 export const validateFileParams = [
   param("id").isUUID().withMessage("Invalid file ID"),
 ];
+
+export const validateFilename = [
+  body("filename")
+    .trim()
+    .notEmpty()
+    .withMessage("Filename cannot be empty")
+    .isLength({ max: 255 })
+    .withMessage("Filename cannot exceed 255 characters")
+    .matches(/^[^\\/:\*\?"<>\|]+$/)
+    .withMessage(
+      'Filename cannot contain slashes or special OS characters (\\ / : * ? " < > |)',
+    ),
+];

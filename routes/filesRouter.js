@@ -3,6 +3,7 @@ import { upload } from "../middlewares/upload.js";
 import {
   uploadFile,
   downloadFile,
+  updateFile,
   deleteFile,
   getFileDetails,
 } from "../controllers/fileController.js";
@@ -34,6 +35,8 @@ filesRouter.use((err, req, res, next) => {
 filesRouter.get("/download/:id", downloadFile);
 
 filesRouter.get("/files/:id", getFileDetails);
+
+filesRouter.put("/files/:id", updateFile);
 
 filesRouter.delete("/files/:id", deleteFile);
 

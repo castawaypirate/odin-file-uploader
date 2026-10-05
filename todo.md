@@ -1,14 +1,16 @@
 # backlog
-- download
-- rename file (use dialog)
 - upload file (cloudinary)
 - delete file (cloudinary)
+- download (cloudinary)
 - shared folder
+- styles
 - move file (optional)
 - move folder (optional)
 - replace/overwrite file (optional)
 
 # done
+- rename file (use dialog)
+- download
 - file details
 - delete file (maybe use dialog here to see the implementation)
 - upload file to folder/subfolder (filesystem) + file validation
@@ -26,7 +28,7 @@
 - [2/10] upload file to folder (filesystem) + error handling
 - [3/10] delete file (database + filesystem)
 - [4/10] file details
-- [5/10] download file
+- [5/10] download file, rename file
 
 # takeaways
 - [28/9]: 
@@ -71,6 +73,9 @@
 - [3/10]:
     - using a foreign key's field name to assign a value and establish a connect in prisma is totally vadid and you don't have to use connect (connect is better for many to many)
     - import.meta.dirname and process.cwd() are the modern ways to get the pathname of the directory in node 
+- [5/10]: 
+    - to download a file attatch the get url (that routes to the controller download function) to an <a></a> tag and it will download on clicking without anything else
+
 
 
 # structure

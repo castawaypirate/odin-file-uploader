@@ -49,6 +49,22 @@ async function deleteFolder(button) {
   button.disabled = false;
 }
 
+const editFileButtons = document.querySelectorAll(".edit-file-btn");
+
+for (let button of editFileButtons) {
+  button.addEventListener("click", () => {
+    const dialog = document.querySelector("#edit-file-dialog");
+    const editFileForm = dialog.querySelector("form");
+    const filenameInput = dialog.querySelector("input");
+    let filename = button.dataset.filename;
+    filename = filename.substring(0, filename.lastIndexOf(".")) || filename;
+    filenameInput.value = filename;
+    editFileForm.action = `/files/${button.dataset.fileId}?_method=PUT&context=${button.dataset.context}`;
+
+    dialog.showModal();
+  });
+}
+
 const deleteFileButtons = document.querySelectorAll(".delete-file-btn");
 
 for (let button of deleteFileButtons) {
