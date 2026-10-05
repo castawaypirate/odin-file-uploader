@@ -2,6 +2,7 @@ import { Router } from "express";
 import { upload } from "../middlewares/upload.js";
 import {
   uploadFile,
+  downloadFile,
   deleteFile,
   getFileDetails,
 } from "../controllers/fileController.js";
@@ -38,6 +39,8 @@ filesRouter.use((err, req, res, next) => {
 
   next(err);
 });
+
+filesRouter.get("/download/:id", downloadFile);
 
 filesRouter.get("/files/:id", getFileDetails);
 

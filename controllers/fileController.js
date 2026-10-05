@@ -59,6 +59,37 @@ export const uploadFile = [
   },
 ];
 
+export const downloadFile = [
+  validateFileParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+    const file = matchedData(req);
+
+    const fileToDownload = await prisma.file.findFirst({
+      where: {
+        id: file.id,
+        userId: req.user.id,
+      },
+    });
+
+    if (!fileToDownload) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "File not found" }],
+      });
+    }
+
+    let filePath = path.join(process.cwd(), "public", fileToDownload.path);
+    return res.download(filePath, fileToDownload.filename, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
+  },
+];
+
 export const deleteFile = [
   validateFileParams,
   sanitizeContextQuery,

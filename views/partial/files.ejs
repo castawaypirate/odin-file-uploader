@@ -10,6 +10,7 @@
     <% for (let file of files) {%>
       <li>
         <a href="/files/<%=file.id%>"><%=file.filename%></a>
+        <button class="download-file-btn" type="button" data-file-id="<%=file.id%>"><a href="/download/<%=file.id%>">Download</a></button>
         <button type="button">Edit</button>
         <button class="delete-file-btn" type="button" data-context="<%=context%>" data-file-id="<%=file.id%>">Delete</button>
       </li>
