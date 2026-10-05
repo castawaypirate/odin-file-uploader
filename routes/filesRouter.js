@@ -28,15 +28,6 @@ filesRouter.use((err, req, res, next) => {
     }
   }
 
-  if (!req.file) {
-    req.flash("error", "Please select a file to upload");
-    if (req.query.context === "root") {
-      return res.redirect("/dashboard");
-    } else {
-      return res.redirect(`/folders/${req.query.context}`);
-    }
-  }
-
   next(err);
 });
 

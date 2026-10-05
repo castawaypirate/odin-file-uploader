@@ -12,6 +12,14 @@ import {
 export const uploadFile = [
   sanitizeContextQuery,
   async (req, res) => {
+    if (!req.file) {
+      req.flash("error", "Please select a file to upload");
+      if (req.query.context === "root") {
+        return res.redirect("/dashboard");
+      } else {
+        return res.redirect(`/folders/${req.query.context}`);
+      }
+    }
     const context = matchedData(req).context;
     let folder;
     if (context === "root") {
