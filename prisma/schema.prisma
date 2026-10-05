@@ -48,6 +48,7 @@ model Folder {
 model File {
   id         String   @id @default(uuid())
   filename   String
+  filetype   String
   size       BigInt
   path       String
   uploadedAt DateTime @default(now()) @map("uploaded_at")

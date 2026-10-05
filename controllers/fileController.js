@@ -44,6 +44,10 @@ export const uploadFile = [
     await prisma.file.create({
       data: {
         filename: req.file.originalname,
+        filetype: path
+          .extname(req.file.originalname)
+          .toLowerCase()
+          .replace(".", ""),
         path: req.file.path.replace("public", ""),
         size: req.file.size,
         folderId: folder.id,
