@@ -21,7 +21,9 @@ filesRouter.use((err, req, res, next) => {
     } else {
       req.flash("error", "Upload failed");
     }
+
     console.error(err);
+
     if (req.query.context === "root") {
       return res.redirect("/dashboard");
     } else {
