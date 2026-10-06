@@ -2,7 +2,9 @@ import { matchedData, validationResult } from "express-validator";
 import { format } from "date-fns";
 import * as mod from "node:fs/promises";
 import path from "node:path";
+import { Readable } from "node:stream";
 import { prisma } from "../lib/prisma.js";
+import { cloudinary } from "../config/cloudinary.js";
 import { formatBytes } from "../lib/utils.js";
 import {
   sanitizeContextQuery,
@@ -50,25 +52,54 @@ export const uploadFile = [
       });
     }
 
-    await prisma.file.create({
-      data: {
-        filename: req.file.originalname,
-        filetype: path
-          .extname(req.file.originalname)
-          .toLowerCase()
-          .replace(".", ""),
-        path: req.file.path.replace("public", ""),
-        size: req.file.size,
-        folderId: folder.id,
-        userId: req.user.id,
-      },
-    });
+    try {
+      const fileBuffer = req.file.buffer;
 
-    if (context === "root") {
-      return res.redirect("/dashboard");
+      const options = {
+        use_filename: true,
+        unique_filename: false,
+        overwrite: true,
+      };
+
+      const result = await cloudinary.uploader.upload_stream(
+        { folder: "file-uploader" },
+        async (error, result) => {
+          if (error) {
+            console.error(error);
+            if (context === "root") {
+              return res.redirect("/dashboard");
+            }
+            return res.redirect(`/folders/${folder.id}`);
+          }
+
+          await prisma.file.create({
+            data: {
+              filename: req.file.originalname,
+              filetype: path
+                .extname(req.file.originalname)
+                .toLowerCase()
+                .replace(".", ""),
+              // path: req.file.path.replace("public", ""),
+              publicId: result.public_id,
+              secureUrl: result.secure_url,
+              size: req.file.size,
+              folderId: folder.id,
+              userId: req.user.id,
+            },
+          });
+
+          if (context === "root") {
+            return res.redirect("/dashboard");
+          }
+
+          return res.redirect(`/folders/${folder.id}`);
+        },
+      );
+      const stream = Readable.from(fileBuffer);
+      stream.pipe(result);
+    } catch (err) {
+      console.error(err);
     }
-
-    return res.redirect(`/folders/${folder.id}`);
   },
 ];
 
@@ -94,12 +125,28 @@ export const downloadFile = [
       });
     }
 
-    let filePath = path.join(process.cwd(), "public", fileToDownload.path);
-    return res.download(filePath, fileToDownload.filename, (err) => {
-      if (err) {
-        console.error(err);
+    try {
+      const fetchResponse = await fetch(fileToDownload.secureUrl);
+
+      if (!fetchResponse.ok) {
+        return res.status(502).render("errorView", {
+          errors: [{ msg: "Failed to retrieve file from storage provider" }],
+        });
       }
-    });
+
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${fileToDownload.filename}"`,
+      );
+
+      Readable.fromWeb(fetchResponse.body).pipe(res);
+    } catch (err) {
+      console.error(err);
+
+      return res.status(502).render("errorView", {
+        errors: [{ msg: "Failed to retrieve file from storage provider" }],
+      });
+    }
   },
 ];
 

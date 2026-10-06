@@ -5,8 +5,8 @@ import path from "path";
 const storage = multer.memoryStorage();
 
 const upload = multer({
-  // storage: storage,
-  dest: "./public/uploads/",
+  storage: storage,
+  // dest: "./public/uploads/",
   limits: {
     fileSize: 2 * 1024 * 1024,
   },
