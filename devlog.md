@@ -7,6 +7,7 @@
 - move file (optional)
 - move folder (optional)
 - replace/overwrite file (optional)
+- redirect login/register/home to dashboard when logged in
 
 # done
 - rename file (use dialog)
@@ -75,6 +76,10 @@
     - import.meta.dirname and process.cwd() are the modern ways to get the pathname of the directory in node 
 - [5/10]: 
     - to download a file attatch the get url (that routes to the controller download function) to an <a></a> tag and it will download on clicking without anything else
+    - never use <a></a> and method-override for deletion
+    - find first then update because prisma.update throws error if it doesn't find record
+    - do not allow user to change filetype extension during renaming
+    - cloudinary sdk automatically detects CLOUDINARY_URL environment variable
 
 
 
