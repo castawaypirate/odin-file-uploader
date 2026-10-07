@@ -1,6 +1,5 @@
 import { matchedData, validationResult } from "express-validator";
 import { format } from "date-fns";
-import * as mod from "node:fs/promises";
 import path from "node:path";
 import { Readable } from "node:stream";
 import { prisma } from "../lib/prisma.js";
@@ -221,32 +220,48 @@ export const deleteFile = [
       });
     }
 
-    const fileDeleted = await prisma.file.deleteMany({
-      where: {
-        id: fileToDelete.id,
-        userId: req.user.id,
-      },
-    });
-
-    // a little bit redundant
-    if (fileDeleted.count === 0) {
-      return res.status(404).render("errorView", {
-        errors: [{ msg: "File not found" }],
-      });
-    }
-
     try {
-      let filePath = path.join(process.cwd(), "public", fileToDelete.path);
-      await mod.unlink(filePath);
+      const deleteResult = await new Promise((resolve, reject) => {
+        const deleteFile = cloudinary.uploader.destroy(
+          fileToDelete.publicId,
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
+            }
+          },
+        );
+      });
+
+      const fileDeleted = await prisma.file.deleteMany({
+        where: {
+          id: fileToDelete.id,
+          userId: req.user.id,
+        },
+      });
+
+      // a little bit redundant
+      if (fileDeleted.count === 0) {
+        return res.status(404).render("errorView", {
+          errors: [{ msg: "File not found" }],
+        });
+      }
+
+      if (file.context === "root") {
+        return res.redirect("/dashboard");
+      }
+
+      return res.redirect(`/folders/${fileToDelete.folderId}`);
     } catch (err) {
       console.error(err);
-    }
 
-    if (file.context === "root") {
-      return res.redirect("/dashboard");
+      return res.redirect(
+        file.context === "root"
+          ? "/dashboard"
+          : `/folders/${fileToDelete.folderId}`,
+      );
     }
-
-    return res.redirect(`/folders/${fileToDelete.folderId}`);
   },
 ];
 
