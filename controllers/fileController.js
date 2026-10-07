@@ -59,46 +59,53 @@ export const uploadFile = [
         use_filename: true,
         unique_filename: false,
         overwrite: true,
+        folder: process.env.CLOUDINARY_FOLDER,
       };
 
-      const result = await cloudinary.uploader.upload_stream(
-        { folder: "file-uploader" },
-        async (error, result) => {
-          if (error) {
-            console.error(error);
-            if (context === "root") {
-              return res.redirect("/dashboard");
+      const uploadResult = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: process.env.CLOUDINARY_FOLDER,
+          },
+          (error, result) => {
+            if (error) {
+              reject(error); // jumps to catch (err)
+            } else {
+              resolve(result); // hands 'result' back to 'uploadResult'
             }
-            return res.redirect(`/folders/${folder.id}`);
-          }
+          },
+        );
+        // pipe data inside the promise
+        Readable.from(fileBuffer).pipe(stream);
+      });
 
-          await prisma.file.create({
-            data: {
-              filename: req.file.originalname,
-              filetype: path
-                .extname(req.file.originalname)
-                .toLowerCase()
-                .replace(".", ""),
-              // path: req.file.path.replace("public", ""),
-              publicId: result.public_id,
-              secureUrl: result.secure_url,
-              size: req.file.size,
-              folderId: folder.id,
-              userId: req.user.id,
-            },
-          });
-
-          if (context === "root") {
-            return res.redirect("/dashboard");
-          }
-
-          return res.redirect(`/folders/${folder.id}`);
+      await prisma.file.create({
+        data: {
+          filename: req.file.originalname,
+          filetype: path
+            .extname(req.file.originalname)
+            .toLowerCase()
+            .replace(".", ""),
+          // path: req.file.path.replace("public", ""),
+          publicId: uploadResult.public_id,
+          secureUrl: uploadResult.secure_url,
+          size: req.file.size,
+          folderId: folder.id,
+          userId: req.user.id,
         },
-      );
-      const stream = Readable.from(fileBuffer);
-      stream.pipe(result);
+      });
+
+      if (context === "root") {
+        return res.redirect("/dashboard");
+      }
+
+      return res.redirect(`/folders/${folder.id}`);
     } catch (err) {
       console.error(err);
+
+      return res.redirect(
+        context === "root" ? "/dashboard" : `/folders/${folder.id}`,
+      );
     }
   },
 ];
