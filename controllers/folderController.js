@@ -24,6 +24,7 @@ export const getFolderCreateForm = [
         where: {
           id: parentFolderId,
           userId: req.userId,
+          deletedAt: null,
         },
       });
 
@@ -65,9 +66,10 @@ export const createFolder = [
         where: {
           id: folder.parentFolderId,
           userId: req.user.id,
+          deletedAt: null,
         },
         include: {
-          subfolders: true,
+          subfolders: { where: { deletedAt: null } },
         },
       });
     } else {
@@ -76,9 +78,10 @@ export const createFolder = [
           name: "/",
           parentFolderId: null,
           userId: req.user.id,
+          deletedAt: null,
         },
         include: {
-          subfolders: true,
+          subfolders: { where: { deletedAt: null } },
         },
       });
     }
@@ -134,6 +137,7 @@ export const getFolderEditForm = [
       where: {
         id: requestedFolder.id,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -182,6 +186,7 @@ export const editFolder = [
       where: {
         id: requestedFolder.id,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -222,10 +227,11 @@ export const getFolderView = [
       where: {
         id: requestedFolder.id,
         userId: req.user.id,
+        deletedAt: null,
       },
       include: {
-        subfolders: true,
-        files: true,
+        subfolders: { where: { deletedAt: null } },
+        files: { where: { deletedAt: null } },
       },
     });
 
@@ -268,6 +274,7 @@ export const deleteFolder = [
       where: {
         id: folderId,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -281,21 +288,63 @@ export const deleteFolder = [
         .json({ msg: "You are not allowed to perform this action" });
     }
 
-    const folder = await prisma.folder.deleteMany({
-      where: {
-        id: folderId,
-        userId: req.user.id,
-      },
-    });
+    // previous implementation: hard delete
+    // const folder = await prisma.folder.deleteMany({
+    //   where: {
+    //     id: folderId,
+    //     userId: req.user.id,
+    //   },
+    // });
 
-    // a little bit redundant
-    if (folder.count === 0) {
-      return res.status(404).json({ msg: "Folder was not found" });
+    try {
+      await prisma.$transaction(async (tx) => {
+        const folders =
+          await tx.$queryRaw`SELECT * FROM get_folder_descendants(${folderToDelete.id})`;
+
+        const folderIds = folders.map((x) => x.id);
+
+        const softDeletedFolders = await tx.folder.updateMany({
+          where: {
+            id: {
+              in: folderIds,
+            },
+            userId: req.user.id,
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        });
+
+        if (softDeletedFolders.count === 0) {
+          throw new Error("FOLDER_NOT_FOUND");
+        }
+
+        await tx.file.updateMany({
+          where: {
+            folderId: {
+              in: folderIds,
+            },
+            userId: req.user.id,
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        });
+      });
+
+      return res.json({
+        msg: "Folder was deleted successfully",
+        parentFolderId: folderToDelete.parentFolderId,
+      });
+    } catch (err) {
+      if (err.message === "FOLDER_NOT_FOUND") {
+        return res.status(404).json({ msg: "Folder was not found" });
+      }
+      console.error(err);
+
+      return res
+        .status(500)
+        .json({ msg: "An error occurred while deleting folder" });
     }
-
-    return res.json({
-      msg: "Folder was deleted successfully",
-      parentFolderId: folderToDelete.parentFolderId,
-    });
   },
 ];

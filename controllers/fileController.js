@@ -37,6 +37,7 @@ export const uploadFile = [
         where: {
           id: context,
           userId: req.user.id,
+          deletedAt: null,
         },
       });
     }
@@ -122,6 +123,7 @@ export const downloadFile = [
       where: {
         id: file.id,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -172,6 +174,7 @@ export const updateFile = [
       where: {
         id: file.id,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -211,6 +214,7 @@ export const deleteFile = [
       where: {
         id: file.id,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 
@@ -279,6 +283,7 @@ export const getFileDetails = [
       where: {
         id: fileId,
         userId: req.user.id,
+        deletedAt: null,
       },
     });
 

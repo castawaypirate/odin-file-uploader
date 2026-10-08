@@ -9,10 +9,11 @@ export const getDashboardView = [
         name: "/",
         parentFolderId: null,
         userId: req.userId,
+        deletedAt: null,
       },
       include: {
-        files: true,
-        subfolders: true,
+        files: { where: { deletedAt: null } },
+        subfolders: { where: { deletedAt: null } },
       },
     });
 
