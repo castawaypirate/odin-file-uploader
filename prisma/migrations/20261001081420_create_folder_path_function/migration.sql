@@ -12,6 +12,6 @@ BEGIN
     SELECT f.id, f.name, f.parent_folder_id
     FROM folders f
     INNER JOIN path p ON p.parent_folder_id = f.id)
-    SELECT pa.id, pa.name FROM path pa;
+  SELECT pa.id, pa.name FROM path pa;
 END;
 $$;
