@@ -1,15 +1,18 @@
 # backlog
-- upload file (cloudinary)
-- delete file (cloudinary)
-- download (cloudinary)
+- soft delete file and bulk delete files when folder is deleted with cron job (make sure soft deleted files dont appear anywhere - soft delete only for the folder and bulk file deletion operations and not individual files)
 - shared folder
 - styles
+- redirect login/register/home to dashboard when logged in
+- add loading indication when file is being uploaded (optional)
 - move file (optional)
 - move folder (optional)
 - replace/overwrite file (optional)
-- redirect login/register/home to dashboard when logged in
+- bulk download many files or many folders (optional)
 
 # done
+- upload file (cloudinary)
+- delete file (cloudinary)
+- download (cloudinary)
 - rename file (use dialog)
 - download
 - file details
@@ -30,6 +33,8 @@
 - [3/10] delete file (database + filesystem)
 - [4/10] file details
 - [5/10] download file, rename file
+- [12/10] upload, download and delete file (cloudinary)
+- [13/10] soft delete
 
 # takeaways
 - [28/9]: 
@@ -80,6 +85,14 @@
     - find first then update because prisma.update throws error if it doesn't find record
     - do not allow user to change filetype extension during renaming
     - cloudinary sdk automatically detects CLOUDINARY_URL environment variable
+- [13/10]:
+    - to revert migration in prisma orm you manually delete the migration folder and then remake the migration and then you migrate reset
+    - await cloudinary.uploader... won't do anything because it is not a promise
+    - if you want to do prisma actions and redirects after/outside the uploader function you should wrap the whole cloudinary.uploader... into a promise and await for that and execute everthing afterwards
+    - use fetch and pipe with Readable.fromWeb to stream data directly to the user's browser so server's ram don't overload
+    - cloudinary.uploader.destroy returns promise so don't need to wrap it
+    - optional values in Prisma/Postgres take value null
+    - keep DELETE HTTP verb for soft delete (even though we are updating stuff instead of deleting them) because REST routing should reflect user's intent, not the backend database implementation
 
 
 
