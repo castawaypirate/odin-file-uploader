@@ -225,18 +225,7 @@ export const deleteFile = [
     }
 
     try {
-      const deleteResult = await new Promise((resolve, reject) => {
-        const deleteFile = cloudinary.uploader.destroy(
-          fileToDelete.publicId,
-          (error, result) => {
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-          },
-        );
-      });
+      await cloudinary.uploader.destroy(fileToDelete.publicId);
 
       const fileDeleted = await prisma.file.deleteMany({
         where: {
