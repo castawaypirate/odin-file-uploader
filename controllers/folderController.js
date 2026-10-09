@@ -48,7 +48,7 @@ export const createFolder = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if (errors.array().findIndex((x) => x.location === "query") > 0) {
+      if (errors.array().findIndex((x) => x.location === "query") !== -1) {
         return res.status(400).render("errorView", { errors: errors.array() });
       }
 
@@ -169,7 +169,7 @@ export const editFolder = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if (errors.array().findIndex((x) => x.location === "param") > 0) {
+      if (errors.array().findIndex((x) => x.location === "param") !== -1) {
         return res.status(400).render("errorView", { errors: errors.array() });
       }
 
