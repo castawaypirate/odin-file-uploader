@@ -176,12 +176,15 @@ export const editFolder = [
       return res.status(400).render("folderForm", {
         errors: errors.array(),
         folderName: req.body.name,
-        action: `/folders/edit/${req.params.id}?_method=PUT`,
+        action: req.query.context
+          ? `/folders/edit/${req.params.id}?_method=PUT&context=${req.query.context}`
+          : `/folders/edit/${req.params.id}?_method=PUT`,
         edit: true,
       });
     }
 
     const requestedFolder = matchedData(req);
+
     const folder = await prisma.folder.findFirst({
       where: {
         id: requestedFolder.id,
@@ -194,6 +197,54 @@ export const editFolder = [
       return res
         .status(404)
         .render("errorView", { errors: [{ msg: "Folder not found" }] });
+    }
+
+    let parentFolder;
+    if (folder.parentFolderId) {
+      parentFolder = await prisma.folder.findFirst({
+        where: {
+          id: folder.parentFolderId,
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        include: {
+          subfolders: { where: { deletedAt: null } },
+        },
+      });
+    } else {
+      parentFolder = await prisma.folder.findFirst({
+        where: {
+          name: "/",
+          parentFolderId: null,
+          userId: req.user.id,
+          deletedAt: null,
+        },
+        include: {
+          subfolders: { where: { deletedAt: null } },
+        },
+      });
+    }
+
+    if (!parentFolder) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "Parent folder not found" }],
+      });
+    }
+
+    if (
+      parentFolder.subfolders.find((x) => x.name === requestedFolder.name) &&
+      requestedFolder.name !== folder.name
+    ) {
+      return res.status(400).render("folderForm", {
+        errors: [
+          { msg: "A folder with this name already exists in this location" },
+        ],
+        folderName: requestedFolder.name,
+        action: req.query.context
+          ? `/folders/edit/${folder.id}?_method=PUT&context=${requestedFolder.context}`
+          : `/folders/edit/${folder.id}?_method=PUT`,
+        edit: true,
+      });
     }
 
     const updatedFolder = await prisma.folder.update({
