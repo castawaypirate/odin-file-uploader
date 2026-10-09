@@ -5,11 +5,13 @@ import passport from "passport";
 import { prisma } from "./lib/prisma.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import path from "path";
+import cron from "node-cron";
 // import { fileURLToPath } from "url";
 import favicon from "serve-favicon";
 import flash from "connect-flash";
 import indexRouter from "./routes/index.js";
 import "./config/passport.js";
+import { cleanUp } from "./jobs/cleanUp.js";
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -79,4 +81,10 @@ app.listen(port, (error) => {
 
   console.log(`Running on Node version: ${process.version}`);
   console.log(`App listening at port: ${port}`);
+});
+
+// ever midnight
+// cron.schedule("0 0 * * *", async () => {
+cron.schedule("* * * * *", async () => {
+  await cleanUp();
 });
