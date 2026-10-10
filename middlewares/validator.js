@@ -66,3 +66,19 @@ export const validateFilename = [
       'Filename cannot contain slashes or special OS characters (\\ / : * ? " < > |)',
     ),
 ];
+
+export const validateShareExpiration = [
+  body("expiration")
+    .notEmpty()
+    .withMessage("Expiration date cannot be empty")
+    .custom((value) => {
+      if (!["1d", "7d", "30d", "never"].includes(value)) {
+        throw new Error("Invalid expiration duration selected");
+      }
+      return true;
+    }),
+];
+
+export const validateShareToken = [
+  param("token").isUUID().withMessage("Invalid share link format"),
+];
