@@ -4,7 +4,9 @@
     <% for (let folder of subfolders) {%>
       <li>
         <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
-        <a href="/folders/edit/<%=folder.id%>">Edit</a>
+        <button>
+          <a href="/folders/edit/<%=folder.id%>">Edit</a>
+        </button>
         <button class="delete-subfolder-btn" type="button" data-id="<%=folder.id%>">Delete</button>
       </li>
     <%}%>
