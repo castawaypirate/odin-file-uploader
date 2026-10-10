@@ -32,15 +32,16 @@ model User {
 }
 
 model Folder {
-  id             String    @id @default(uuid())
+  id             String      @id @default(uuid())
   name           String
-  deletedAt      DateTime? @map("deleted_at")
-  parentFolderId String?   @map("parent_folder_id")
-  parentFolder   Folder?   @relation("FolderSubfolders", fields: [parentFolderId], references: [id])
-  subfolders     Folder[]  @relation("FolderSubfolders")
+  deletedAt      DateTime?   @map("deleted_at")
+  parentFolderId String?     @map("parent_folder_id")
+  parentFolder   Folder?     @relation("FolderSubfolders", fields: [parentFolderId], references: [id])
+  subfolders     Folder[]    @relation("FolderSubfolders")
   files          File[]
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId         String    @map("user_id")
+  shareLinks     ShareLink[]
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String      @map("user_id")
 
   @@index([userId])
   @@map("folders")
@@ -65,4 +66,15 @@ model File {
   @@index([folderId, userId])
   @@index([userId])
   @@map("files")
+}
+
+model ShareLink {
+  id        String    @id @default(uuid())
+  token     String    @unique @default(uuid())
+  expiresAt DateTime? @map("expires_at")
+  folder    Folder    @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  folderId  String    @map("folder_id")
+
+  @@index([folderId])
+  @@map("share_links")
 }
