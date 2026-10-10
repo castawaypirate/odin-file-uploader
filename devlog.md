@@ -1,5 +1,4 @@
 # backlog
-- soft delete file and bulk delete files when folder is deleted with cron job (make sure soft deleted files dont appear anywhere - soft delete only for the folder and bulk file deletion operations and not individual files)
 - shared folder
 - styles
 - redirect login/register/home to dashboard when logged in
@@ -10,6 +9,7 @@
 - bulk download many files or many folders (optional)
 
 # done
+- soft delete file and bulk delete files when folder is deleted with cron job (make sure soft deleted files dont appear anywhere - soft delete only for the folder and bulk file deletion operations and not individual files)
 - upload file (cloudinary)
 - delete file (cloudinary)
 - download (cloudinary)
@@ -60,7 +60,7 @@
     - client side should have errors dynamically rendered into screen, server side you have to reload page while passing errors or redirect
     - if you wont to write to server logs errors that occur on client side you have to create a backend enpoint and request it inside the catch
     - to get nested entities from the database you may use materilized paths with is a field on the model that holds the current path as a string value or use recursive CTEs (common table expressions) which is a reqursive query that is strored in a stored procedure for example when you use prisma because prisma doesnt support neither
-    - session lives on the databse (redis, postgres) and uses cookies' connect.sid to return its connect on each request - cookies are stored in browser
+    - session lives on the database (redis, postgres) and uses cookies' connect.sid to return its connect on each request - cookies are stored in browser
     - redux = state management for react and dies on refresh
 - [1/10]:
     - stored procedures are for inserting or updating, and functions are for selecting
@@ -85,7 +85,7 @@
     - find first then update because prisma.update throws error if it doesn't find record
     - do not allow user to change filetype extension during renaming
     - cloudinary sdk automatically detects CLOUDINARY_URL environment variable
-- [13/10]:
+- [12/10]:
     - to revert migration in prisma orm you manually delete the migration folder and then remake the migration and then you migrate reset
     - await cloudinary.uploader... won't do anything because it is not a promise
     - if you want to do prisma actions and redirects after/outside the uploader function you should wrap the whole cloudinary.uploader... into a promise and await for that and execute everthing afterwards
@@ -93,6 +93,15 @@
     - cloudinary.uploader.destroy returns promise so don't need to wrap it
     - optional values in Prisma/Postgres take value null
     - keep DELETE HTTP verb for soft delete (even though we are updating stuff instead of deleting them) because REST routing should reflect user's intent, not the backend database implementation
+- [13/10]:
+    - to rename old migration change the name of the migration folder without changing the timestamp and then migrate reset - this will recreate the _prisma_migrations table as well
+    - WITH RECURSIVE works more like a loop and less like a recursion
+    - WITH RECURSIVE path AS (...) the first select is the anchor and appends the results on the path variable, then the UNION runs for the next record or records that it finds which meets or meet the conditions and appends it/them at the path, and then on the next iteration the last appended record or records is/are used for the conditions and so on
+    - RETURN QUERY means that execute the query that follows and append its resulting rows to the to table that will be returned by the function - in other words it connects the results of the query running inside the function with the output of the function (meaning that without RETURN QUERY on top function would run the query that had inside but it wouldn't return it)
+    - never call res functions inside a prisma transaction - to abort a transaction when a business rule fails throw a custom error which triggers a rollback and it is caught by the catch outside the transaction
+    - don't put api calls inside a prisma transaction because it holds the database hostage till the request cycle is finished
+    - do the external work first and then do the database
+    - cloudinary batch delete takes 100 ids per request
 
 
 
