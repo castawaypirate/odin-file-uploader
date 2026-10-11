@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Share</title>
+  </head>
+  <body>
+    <%- include("partial/header.ejs") %>
+    <div class="content">
+      <%if (locals.folder.shareLinks.length > 0) {%>
+       <h1>Existing links</h1>
+       <%for (let link of folder.shareLinks) {%>
+        <div>
+          <div>
+            <%=url%>/share/<%=link.token%>
+          </div>
+          <div>
+            <%=link.expiresAt%>
+          </div>
+        </div>
+        <%}%>
+      <%}%>
+      <h1>Share folder</h1>
+      <form action="/folders/<%=locals.folder.id%>/share" method="POST">
+      <%- include("partial/errors.ejs") %>
+        <div class="form-control">
+          <label for="expiration">Link expiration</label>
+          <select id="expiration" name="expiration">
+            <option value="1d">1 day</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </div>
+        <button type="submit">Generate link</button>
+      </form>
+    </div>
+  </body>
+</html>

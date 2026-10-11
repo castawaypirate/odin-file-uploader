@@ -5,6 +5,7 @@ import {
   validateFolderParams,
   validateParentFolderQuery,
   sanitizeContextQuery,
+  validateShareExpiration,
 } from "../middlewares/validator.js";
 import { prisma } from "../lib/prisma.js";
 
@@ -397,5 +398,93 @@ export const deleteFolder = [
         .status(500)
         .json({ msg: "An error occurred while deleting folder" });
     }
+  },
+];
+
+export const getShareFolderLinks = [
+  validateFolderParams,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const folderId = matchedData(req).id;
+
+    const folder = await prisma.folder.findFirst({
+      where: {
+        id: folderId,
+        userId: req.userId,
+        deletedAt: null,
+      },
+      include: {
+        shareLinks: true,
+      },
+    });
+
+    if (!folder) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "Folder not found" }],
+      });
+    }
+
+    const url = req.protocol + "://" + req.get("host");
+
+    return res.render("shareFolderLinks", { folder: folder, url: url });
+  },
+];
+
+export const generateShareLink = [
+  validateFolderParams,
+  validateShareExpiration,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      if (errors.array().findIndex((x) => x.location === "params") !== -1) {
+        return res.status(400).render("errorView", { errors: errors.array() });
+      }
+
+      return res.status(400).render("shareFolderLinks", {
+        errors: errors.array(),
+        folderId: req.params.id,
+      });
+    }
+
+    const data = matchedData(req);
+
+    const folder = await prisma.folder.findFirst({
+      where: {
+        id: data.id,
+        userId: req.userId,
+        deletedAt: null,
+      },
+    });
+
+    if (!folder) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "Folder not found" }],
+      });
+    }
+
+    const duration = data.expiration;
+
+    let expiresAt = null;
+    if (duration !== "never") {
+      expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + parseInt(duration.slice(0, -1)));
+    }
+
+    const newShareLink = await prisma.shareLink.create({
+      data: {
+        expiresAt: expiresAt,
+        folder: {
+          connect: {
+            id: folder.id,
+          },
+        },
+      },
+    });
+
+    return res.redirect(`/folders/${folder.id}/share`);
   },
 ];
