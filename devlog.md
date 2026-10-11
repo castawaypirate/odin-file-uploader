@@ -1,5 +1,5 @@
 # backlog
-- shared folder
+- shared folder (share folder form, shared folder view with files and subfolders, shared folders list - when user presses again share on an already shared folder what then?we create a new one because it may serve a different purpose - Extend and Revoke shared link from shared folders list)
 - styles
 - redirect login/register/home to dashboard when logged in
 - add loading indication when file is being uploaded (optional)
@@ -35,6 +35,7 @@
 - [5/10] download file, rename file
 - [12/10] upload, download and delete file (cloudinary)
 - [13/10] soft delete
+- [14/10] share folder
 
 # takeaways
 - [28/9]: 
