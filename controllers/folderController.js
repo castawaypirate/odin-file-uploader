@@ -170,7 +170,7 @@ export const editFolder = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if (errors.array().findIndex((x) => x.location === "param") !== -1) {
+      if (errors.array().findIndex((x) => x.location === "params") !== -1) {
         return res.status(400).render("errorView", { errors: errors.array() });
       }
 
