@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/clipboard.js" defer></script>
     <title>Share</title>
   </head>
   <body>
@@ -12,11 +13,13 @@
        <h1>Existing links</h1>
        <%for (let link of folder.shareLinks) {%>
         <div>
-          <div>
-            <%=url%>/share/<%=link.token%>
-          </div>
+        <input type="text" id="<%=link.id%>" value="<%=url%>/share/<%=link.token%>" onclick="this.select() "readonly>
           <div>
             <%=link.expiresAt%>
+          </div>
+          <div>
+            <button type="button"><a href="<%=url%>/share/<%=link.token%>">View</a></button> 
+            <button type="button" onclick="copyLink('<%=link.id%>')" >Copy</button> 
           </div>
         </div>
         <%}%>
