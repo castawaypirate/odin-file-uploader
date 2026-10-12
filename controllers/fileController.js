@@ -10,8 +10,10 @@ import {
   validateFileParams,
   validateFilename,
 } from "../middlewares/validator.js";
+import { isAuth } from "../middlewares/auth.js";
 
 export const uploadFile = [
+  isAuth,
   sanitizeContextQuery,
   async (req, res) => {
     if (!req.file) {
@@ -111,6 +113,7 @@ export const uploadFile = [
 ];
 
 export const downloadFile = [
+  isAuth,
   validateFileParams,
   async (req, res) => {
     const errors = validationResult(req);
@@ -159,6 +162,7 @@ export const downloadFile = [
 ];
 
 export const updateFile = [
+  isAuth,
   validateFileParams,
   sanitizeContextQuery,
   validateFilename,
@@ -200,6 +204,7 @@ export const updateFile = [
 ];
 
 export const deleteFile = [
+  isAuth,
   validateFileParams,
   sanitizeContextQuery,
   async (req, res) => {
@@ -259,6 +264,7 @@ export const deleteFile = [
 ];
 
 export const getFileDetails = [
+  isAuth,
   validateFileParams,
   async (req, res) => {
     const errors = validationResult(req);
