@@ -15,9 +15,9 @@
       <h3>Folders</h3>
       <ul>
         <% if (folder?.subfolders && folder?.subfolders.length > 0) {%>
-          <% for (let folder of folder.subfolders) {%>
+          <% for (let fold of folder.subfolders) {%>
             <li>
-              <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
+              <a href="/share/<%=token%>/folders/<%=fold.id%>"><%=fold.name%></a>
             </li>
           <%}%>
         <%} else {%>
@@ -29,8 +29,8 @@
         <% if (folder?.files && folder?.files.length > 0) {%>
           <% for (let file of folder.files) {%>
             <li>
-              <a href="/files/<%=file.id%>"><%=folder.file.filename%></a>
-              <button class="download-file-btn" type="button"><a href="/download/<%=file.id%>">Download</a></button>
+              <a href="/share/<%=token%>/files/<%=file.id%>"><%=file.filename%></a>
+              <button class="download-file-btn" type="button"><a href="">Download</a></button>
             </li>
           <%}%>
         <%} else {%>

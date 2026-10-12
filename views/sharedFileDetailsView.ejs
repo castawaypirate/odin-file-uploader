@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File details</title>
+  </head>
+  <body>
+    <%- include("partial/header.ejs") %>
+    <div class="content">
+      <div class="folder">
+      <a href="/share/<%=locals.token%>/folders/<%=locals.folderId%>">
+        Back to folder
+      </a>
+      </div>
+      <h3><%=locals.file?.filename%></h3>
+      <div><%=locals.file?.uploadedAt%></div>
+      <div><%=locals.file?.size%></div>
+    </div>
+  </body>
+</html>
