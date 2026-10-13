@@ -99,6 +99,13 @@ export const getSharedFolderView = [
       });
     }
 
+    const path =
+      await prisma.$queryRaw`SELECT * FROM get_folder_path(${params.id})`;
+
+    const index = path.findIndex((x) => x.id === folderIds[0]);
+
+    const sharedPath = path.slice(0, index + 1).reverse();
+
     const sharedFolder = await prisma.folder.findUnique({
       where: {
         id: params.id,
@@ -112,6 +119,7 @@ export const getSharedFolderView = [
     return res.render("sharedFolderView", {
       token: shareLink.token,
       folder: sharedFolder,
+      path: sharedPath,
     });
   },
 ];

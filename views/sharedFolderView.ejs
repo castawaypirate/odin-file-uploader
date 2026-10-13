@@ -9,7 +9,12 @@
     <%- include("partial/header.ejs") %>
     <div class="content">
       <div class="path">
-        here will be the path
+          <%for (let i=0;i<path.length;i++) {%>
+            <a href="/share/<%=token%>/folders/<%=path[i].id%>"><%=path[i].name%></a>
+            <%if (i!==path.length-1) {%>
+              <span>/</span>
+            <%}%>
+          <%}%>
       </div>
       <h2><%=locals.folder?.name%></h2>
       <h3>Folders</h3>
