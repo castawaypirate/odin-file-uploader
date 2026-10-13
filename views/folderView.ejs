@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="/js/folderView.js" defer></script>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/js/folderView.js" defer></script>
     <title><%=locals.folder?.name%></title>
   </head>
   <body>
@@ -21,6 +21,7 @@
       <h2><%=locals.folder?.name%></h2>
       <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
       <a href="/folders/edit/<%=locals.folder?.id%>?context=current">Edit</a>
+      <button><a href="/folders/<%=locals.folder?.id%>/share">Share</a></button>
       <button type="button" data-id="<%=locals.folder?.id%>" id="delete-current-folder-btn">Delete</button>
       <%- include("partial/folders.ejs", {subfolders: locals.folder?.subfolders}) %>
       <%- include("partial/files.ejs", {files: locals.folder?.files, context: locals.folder?.id}) %>
