@@ -30,7 +30,7 @@
           <% for (let file of folder.files) {%>
             <li>
               <a href="/share/<%=token%>/files/<%=file.id%>"><%=file.filename%></a>
-              <button class="download-file-btn" type="button"><a href="">Download</a></button>
+              <button class="download-file-btn" type="button"><a href="/share/<%=token%>/download/<%=file.id%>">Download</a></button>
             </li>
           <%}%>
         <%} else {%>
