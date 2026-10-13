@@ -35,7 +35,8 @@
 - [5/10] download file, rename file
 - [12/10] upload, download and delete file (cloudinary)
 - [13/10] soft delete
-- [14/10] share folder
+- [14/10] create share links + shared folder view
+- [15/10] navigate to subfolders of shared folder + download shared file from shared folder or from its subfolders
 
 # takeaways
 - [28/9]: 
@@ -103,6 +104,11 @@
     - don't put api calls inside a prisma transaction because it holds the database hostage till the request cycle is finished
     - do the external work first and then do the database
     - cloudinary batch delete takes 100 ids per request
+- [14/10]:
+    - created ShareLink table so on folder may have several links because the may serve different purposes (like one it will be for one day to share with an outside partner and another which will be forever to share with your team)
+    - use another uuid field for the share url instead of the id of the ShareLink table
+    - Post/Redirect/Get (PRG) pattern on /folders/:id/share after submitting the form
+    - input with readonly property for displaying the link
 
 
 
