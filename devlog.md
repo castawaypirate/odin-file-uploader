@@ -1,4 +1,5 @@
 # backlog
+- handle unknown routes
 - shared folder (share folder form, shared folder view with files and subfolders, shared folders list - when user presses again share on an already shared folder what then?we create a new one because it may serve a different purpose - Extend and Revoke shared link from shared folders list)
 - styles
 - redirect login/register/home to dashboard when logged in
@@ -37,6 +38,7 @@
 - [13/10] soft delete
 - [14/10] create share links + shared folder view
 - [15/10] navigate to subfolders of shared folder + download shared file from shared folder or from its subfolders
+- [16/10] share links view + extend + revoke
 
 # takeaways
 - [28/9]: 
@@ -109,6 +111,11 @@
     - use another uuid field for the share url instead of the id of the ShareLink table
     - Post/Redirect/Get (PRG) pattern on /folders/:id/share after submitting the form
     - input with readonly property for displaying the link
+- [15/10]:
+    - after creating share token redirect from /share/:token to /share/:token/folders/:id where id is the id of the top folder 
+    - all file routes should be authenticated and share routes should be unauthenticated but should check connection between share token and files, folder or subfolders id
+    - uuids starting with digit are invalid for querySelector
+    - in prisma you can use where inside include on one-to-many relations (because filtering a list can safely return an empty array) - you cannot use where inside inlcude on a required many-to-one relation (like shareLink's single folder) and you have to put that filter in the top level 
 
 
 
