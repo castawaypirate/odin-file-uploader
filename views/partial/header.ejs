@@ -9,6 +9,7 @@
   <div>
     <% if (locals.currentUser) {%>
       <a href="/share/links">Shares</a>
+      <div>Hello, <%=currentUser.username%></div>
       <a href="/logout">Logout</a>
     <%} else {%>
       <a href="/login">Login</a>
