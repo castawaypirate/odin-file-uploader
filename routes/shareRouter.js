@@ -5,9 +5,15 @@ import {
   getSharedFolderView,
   getSharedFileDetails,
   downloadSharedFile,
+  getShareLinks,
+  revokeShareLink,
 } from "../controllers/shareController.js";
 
 const shareRouter = Router();
+
+shareRouter.get("/share/links", getShareLinks);
+
+shareRouter.delete("/share/links/:token/revoke", revokeShareLink);
 
 shareRouter.get("/share/:token", resolveShareLink);
 

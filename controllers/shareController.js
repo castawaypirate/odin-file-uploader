@@ -8,6 +8,7 @@ import {
 } from "../middlewares/validator.js";
 import { prisma } from "../lib/prisma.js";
 import { formatBytes } from "../lib/utils.js";
+import { isAuth } from "../middlewares/auth.js";
 
 export const resolveShareLink = [
   validateShareToken,
@@ -273,3 +274,53 @@ export const downloadSharedFile = [
   },
 ];
 
+export const getShareLinks = [
+  isAuth,
+  async (req, res) => {
+    const shareLinks = await prisma.shareLink.findMany({
+      include: {
+        folder: true,
+      },
+    });
+
+    return res.render("shareLinksView", { links: shareLinks });
+  },
+];
+
+export const revokeShareLink = [
+  isAuth,
+  validateShareToken,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ msg: errors.array() });
+    }
+
+    const token = matchedData(req).token;
+
+    const shareLink = await prisma.shareLink.findUnique({
+      where: {
+        token: token,
+        folder: {
+          userId: req.user.id,
+        },
+      },
+    });
+
+    if (!shareLink) {
+      return res.status(404).json({ msg: "Share link not found" });
+    }
+
+    const deletedLink = await prisma.shareLink.deleteMany({
+      where: {
+        id: shareLink.id,
+      },
+    });
+
+    if (deletedLink.count === 0) {
+      return res.status(404).json({ msg: "Share link not found" });
+    }
+
+    return res.status(200).json({ msg: "Share link was revoked successfully" });
+  },
+];

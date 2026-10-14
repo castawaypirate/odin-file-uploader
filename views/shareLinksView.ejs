@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/js/shareLinksView.js" defer></script>
+  <title>Share links</title>
+  </head>
+  <body>
+    <%- include("partial/header.ejs") %>
+
+    <dialog id="extend-share-link-dialog">
+      <form method="POST">
+      <%- include("partial/errors.ejs") %>
+        <div class="form-control">
+          <label for="expiration">Link expiration</label>
+          <select id="expiration" name="expiration">
+            <option value="1d">1 day</option>
+            <option value="7d">7 days</option>
+            <option value="30d">30 days</option>
+            <option value="never">Never</option>
+          </select>
+        </div>
+        <button commandfor="extend-share-link-dialog" command="close" type="submit">Extend</button>
+        <button commandfor="extend-share-link-dialog" command="close" type="button">Close</button>
+      </form>
+    </dialog>
+
+    <div class="content">
+      <% if (locals.links?.length > 0) {%>
+        <% for (let link of links) {%>
+          <div>
+            <a href="/share/<%=link.token%>"><%=link.folder.name%></a>
+            <div>
+              <%=link.expiresAt%>
+            </div>
+            <button>Extend</button>
+            <button data-token="<%=link.token%>" class="revoke-share-link-btn">Revoke</button>
+          </div>
+        <%}%>
+      <%} else {%>
+        <p>No active share links found</p>
+      <%}%>
+    </div>
+  </body>
+</html>
