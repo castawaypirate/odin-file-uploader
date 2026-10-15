@@ -440,14 +440,7 @@ export const generateShareLink = [
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      if (errors.array().findIndex((x) => x.location === "params") !== -1) {
-        return res.status(400).render("errorView", { errors: errors.array() });
-      }
-
-      return res.status(400).render("shareFolderLinks", {
-        errors: errors.array(),
-        folderId: req.params.id,
-      });
+      return res.status(400).render("errorView", { errors: errors.array() });
     }
 
     const data = matchedData(req);

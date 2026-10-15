@@ -26,7 +26,6 @@
       <%}%>
       <h1>Share folder</h1>
       <form action="/folders/<%=locals.folder.id%>/share" method="POST">
-      <%- include("partial/errors.ejs") %>
         <div class="form-control">
           <label for="expiration">Link expiration</label>
           <select id="expiration" name="expiration">
