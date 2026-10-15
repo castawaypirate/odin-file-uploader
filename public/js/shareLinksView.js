@@ -37,3 +37,16 @@ for (const btn of revokeBtns) {
     btn.disabled = false;
   });
 }
+
+const updateBtns = document.querySelectorAll(".update-share-link-btn");
+
+for (let btn of updateBtns) {
+  btn.addEventListener("click", () => {
+    const updateShareLinkDialog = document.querySelector(
+      "#update-share-link-dialog",
+    );
+    const updateShareLinkForm = updateShareLinkDialog.querySelector("form");
+    updateShareLinkForm.action = `/share/links/${btn.dataset.token}/update?_method=PATCH`;
+    updateShareLinkDialog.showModal();
+  });
+}

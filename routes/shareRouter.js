@@ -7,11 +7,14 @@ import {
   downloadSharedFile,
   getShareLinks,
   revokeShareLink,
+  updateShareLinkExpiration,
 } from "../controllers/shareController.js";
 
 const shareRouter = Router();
 
 shareRouter.get("/share/links", getShareLinks);
+
+shareRouter.patch("/share/links/:token/update", updateShareLinkExpiration);
 
 shareRouter.delete("/share/links/:token/revoke", revokeShareLink);
 

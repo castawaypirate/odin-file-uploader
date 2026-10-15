@@ -5,6 +5,7 @@ import {
   validateFileParams,
   validateFolderParams,
   validateShareToken,
+  validateShareExpiration,
 } from "../middlewares/validator.js";
 import { prisma } from "../lib/prisma.js";
 import { formatBytes } from "../lib/utils.js";
@@ -322,5 +323,62 @@ export const revokeShareLink = [
     }
 
     return res.status(200).json({ msg: "Share link was revoked successfully" });
+  },
+];
+
+export const updateShareLinkExpiration = [
+  isAuth,
+  validateShareToken,
+  validateShareExpiration,
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("errorView", { errors: errors.array() });
+    }
+
+    const data = matchedData(req);
+
+    const token = data.token;
+
+    const shareLink = await prisma.shareLink.findUnique({
+      where: {
+        token: token,
+        folder: {
+          userId: req.user.id,
+          deletedAt: null,
+        },
+      },
+    });
+
+    if (!shareLink) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "Share link not found" }],
+      });
+    }
+
+    const duration = data.expiration;
+
+    let expiresAt = null;
+    if (duration !== "never") {
+      expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + parseInt(duration.slice(0, -1)));
+    }
+
+    const patched = await prisma.shareLink.updateMany({
+      where: {
+        id: shareLink.id,
+      },
+      data: {
+        expiresAt: expiresAt,
+      },
+    });
+
+    if (patched.count === 0) {
+      return res.status(404).render("errorView", {
+        errors: [{ msg: "Share link not found" }],
+      });
+    }
+
+    return res.redirect("/share/links");
   },
 ];

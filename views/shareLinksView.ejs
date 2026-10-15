@@ -9,20 +9,20 @@
   <body>
     <%- include("partial/header.ejs") %>
 
-    <dialog id="extend-share-link-dialog">
+    <dialog id="update-share-link-dialog">
       <form method="POST">
       <%- include("partial/errors.ejs") %>
         <div class="form-control">
           <label for="expiration">Link expiration</label>
           <select id="expiration" name="expiration">
-            <option value="1d">1 day</option>
-            <option value="7d">7 days</option>
-            <option value="30d">30 days</option>
+            <option value="1d">1 day from now</option>
+            <option value="7d">7 days from now</option>
+            <option value="30d">30 days from now</option>
             <option value="never">Never</option>
           </select>
         </div>
-        <button commandfor="extend-share-link-dialog" command="close" type="submit">Extend</button>
-        <button commandfor="extend-share-link-dialog" command="close" type="button">Close</button>
+        <button commandfor="update-share-link-dialog" type="submit">Update</button>
+        <button commandfor="update-share-link-dialog" command="close" type="button">Cancel</button>
       </form>
     </dialog>
 
@@ -34,7 +34,7 @@
             <div>
               <%=link.expiresAt%>
             </div>
-            <button>Extend</button>
+            <button data-token="<%=link.token%>" class="update-share-link-btn">Update Expiration</button>
             <button data-token="<%=link.token%>" class="revoke-share-link-btn">Revoke</button>
           </div>
         <%}%>
