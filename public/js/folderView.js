@@ -45,7 +45,6 @@ async function deleteFolder(button) {
     console.error(err);
     window.alert("Something went wrong");
   }
-
   button.disabled = false;
 }
 

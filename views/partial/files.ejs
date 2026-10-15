@@ -2,8 +2,8 @@
 <dialog id="delete-file-dialog">
   <form method="POST">
     <p>Are you sure?</p>
-    <button commandfor="delete-file-dialog" command="close" type="submit">Delete</button>
-    <button commandfor="delete-file-dialog" command="close" type="button">Close</button>
+    <button commandfor="delete-file-dialog" type="submit">Delete</button>
+    <button commandfor="delete-file-dialog" command="close" type="button">Cancel</button>
   </form>
 </dialog>
 <dialog id="edit-file-dialog">
@@ -12,8 +12,8 @@
       <label for="filename">Name</label>
       <input type="text" id="filename" name="filename">
     </div>
-    <button commandfor="edit-file-dialog" command="close" type="submit">Update</button>
-    <button commandfor="edit-file-dialog" command="close" type="button">Close</button>
+    <button commandfor="edit-file-dialog" type="submit">Update</button>
+    <button commandfor="edit-file-dialog" command="close" type="button">Cancel</button>
   </form>
 </dialog>
 <ul>
