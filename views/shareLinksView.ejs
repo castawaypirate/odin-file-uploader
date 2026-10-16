@@ -31,7 +31,11 @@
           <div>
             <a href="/share/<%=link.token%>"><%=link.folder.name%></a>
             <div>
-              <%=link.expiresAt%>
+              <% if (link.expiresAt) {%>
+                <%=link.expiresAt%>
+              <%} else {%>
+                No expiration date
+              <%} %>
             </div>
             <button data-token="<%=link.token%>" class="update-share-link-btn">Update Expiration</button>
             <button data-token="<%=link.token%>" class="revoke-share-link-btn">Revoke</button>

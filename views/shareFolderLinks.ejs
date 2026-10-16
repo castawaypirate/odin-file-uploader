@@ -15,7 +15,11 @@
         <div>
         <input type="text" id="<%=link.id%>" value="<%=url%>/share/<%=link.token%>" onclick="this.select() "readonly>
           <div>
-            <%=link.expiresAt%>
+            <% if (link.expiresAt) {%>
+              <%=link.expiresAt%>
+            <%} else {%>
+              No expiration date
+            <%} %>
           </div>
           <div>
             <button type="button"><a href="<%=url%>/share/<%=link.token%>">View</a></button> 
