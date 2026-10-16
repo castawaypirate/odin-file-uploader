@@ -1,6 +1,8 @@
 import { validationResult, matchedData } from "express-validator";
 import { format } from "date-fns";
+import { create } from "content-disposition";
 import { Readable } from "node:stream";
+import { pipeline } from "node:stream/promises";
 import {
   validateFileParams,
   validateFolderParams,
@@ -24,6 +26,9 @@ export const resolveShareLink = [
     const shareLink = await prisma.shareLink.findUnique({
       where: {
         token: token,
+        folder: {
+          deletedAt: null,
+        },
       },
       include: {
         folder: true,
@@ -38,13 +43,14 @@ export const resolveShareLink = [
       });
     }
 
-    const now = new Date();
-    const expiresAt = new Date(shareLink.expiresAt);
-
-    if (expiresAt && now > expiresAt) {
-      return res.status(410).render("errorView", {
-        errors: [{ msg: "This share link has expired" }],
-      });
+    if (shareLink.expiresAt) {
+      const now = new Date();
+      const expiresAt = new Date(shareLink.expiresAt);
+      if (shareLink && now > expiresAt) {
+        return res.status(410).render("errorView", {
+          errors: [{ msg: "This share link has expired" }],
+        });
+      }
     }
 
     return res.redirect(`/share/${token}/folders/${shareLink.folder.id}`);
@@ -81,13 +87,14 @@ export const getSharedFolderView = [
       });
     }
 
-    const now = new Date();
-    const expiresAt = new Date(shareLink.expiresAt);
-
-    if (expiresAt && now > expiresAt) {
-      return res.status(410).render("errorView", {
-        errors: [{ msg: "This share link has expired" }],
-      });
+    if (shareLink.expiresAt) {
+      const now = new Date();
+      const expiresAt = new Date(shareLink.expiresAt);
+      if (shareLink && now > expiresAt) {
+        return res.status(410).render("errorView", {
+          errors: [{ msg: "This share link has expired" }],
+        });
+      }
     }
 
     const folders =
@@ -111,6 +118,7 @@ export const getSharedFolderView = [
     const sharedFolder = await prisma.folder.findUnique({
       where: {
         id: params.id,
+        deletedAt: null,
       },
       include: {
         subfolders: { where: { deletedAt: null } },
@@ -156,13 +164,14 @@ export const getSharedFileDetails = [
       });
     }
 
-    const now = new Date();
-    const expiresAt = new Date(shareLink.expiresAt);
-
-    if (expiresAt && now > expiresAt) {
-      return res.status(410).render("errorView", {
-        errors: [{ msg: "This share link has expired" }],
-      });
+    if (shareLink.expiresAt) {
+      const now = new Date();
+      const expiresAt = new Date(shareLink.expiresAt);
+      if (expiresAt && now > expiresAt) {
+        return res.status(410).render("errorView", {
+          errors: [{ msg: "This share link has expired" }],
+        });
+      }
     }
 
     const folders =
@@ -177,7 +186,7 @@ export const getSharedFileDetails = [
       },
     });
 
-    if (!folderIds.includes(file.folderId) || !file) {
+    if (!file || !folderIds.includes(file.folderId)) {
       return res.status(404).render("errorView", {
         errors: [{ msg: "File not found" }],
       });
@@ -223,13 +232,14 @@ export const downloadSharedFile = [
       });
     }
 
-    const now = new Date();
-    const expiresAt = new Date(shareLink.expiresAt);
-
-    if (expiresAt && now > expiresAt) {
-      return res.status(410).render("errorView", {
-        errors: [{ msg: "This share link has expired" }],
-      });
+    if (shareLink.expiresAt) {
+      const now = new Date();
+      const expiresAt = new Date(shareLink.expiresAt);
+      if (expiresAt && now > expiresAt) {
+        return res.status(410).render("errorView", {
+          errors: [{ msg: "This share link has expired" }],
+        });
+      }
     }
 
     const folders =
@@ -244,7 +254,7 @@ export const downloadSharedFile = [
       },
     });
 
-    if (!folderIds.includes(file.folderId) || !file) {
+    if (!file || !folderIds.includes(file.folderId)) {
       return res.status(404).render("errorView", {
         errors: [{ msg: "File not found" }],
       });
@@ -259,12 +269,15 @@ export const downloadSharedFile = [
         });
       }
 
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="${file.filename}"`,
-      );
+      // res.setHeader(
+      //   "Content-Disposition",
+      //   `attachment; filename="${file.filename}"`,
+      // );
 
-      Readable.fromWeb(fetchResponse.body).pipe(res);
+      res.setHeader("Content-Disposition", create(file.filename));
+
+      // Readable.fromWeb(fetchResponse.body).pipe(res);
+      await pipeline(Readable.fromWeb(fetchResponse.body), res);
     } catch (err) {
       console.error(err);
 
@@ -279,6 +292,12 @@ export const getShareLinks = [
   isAuth,
   async (req, res) => {
     const shareLinks = await prisma.shareLink.findMany({
+      where: {
+        folder: {
+          deletedAt: null,
+          userId: req.user.id,
+        },
+      },
       include: {
         folder: true,
       },

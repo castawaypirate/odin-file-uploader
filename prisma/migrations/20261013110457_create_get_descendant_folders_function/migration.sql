@@ -7,11 +7,13 @@ BEGIN
   WITH RECURSIVE path AS (
     SELECT fo.id, fo.name, fo.parent_folder_id
     FROM folders fo
-    WHERE fo.id = folder_id
+    WHERE fo.id = folder_id AND fo.deleted_at IS NULL
     UNION
     SELECT f.id, f.name, f.parent_folder_id
     FROM folders f
-    INNER JOIN path p ON p.id = f.parent_folder_id)
+    INNER JOIN path p ON p.id = f.parent_folder_id
+    WHERE f.deleted_at IS NULL
+  )
   SELECT pa.id, pa.name FROM path pa;
 END;
 $$;
