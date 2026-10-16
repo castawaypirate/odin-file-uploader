@@ -1,5 +1,6 @@
 import { body, query, param } from "express-validator";
 import { prisma } from "../lib/prisma.js";
+import validator from "validator";
 
 export const validateRegister = [
   body("username")
@@ -44,6 +45,18 @@ export const validateParentFolderQuery = [
 
 export const sanitizeContextQuery = [
   query("context").optional().trim().escape(),
+];
+
+export const validateContextQuery = [
+  query("context")
+    .trim()
+    .escape()
+    .custom((value) => {
+      if (value === "root" || validator.isUUID(value)) {
+        return true;
+      }
+      throw new Error("The specified context is invalid");
+    }),
 ];
 
 export const validateFolderParams = [
