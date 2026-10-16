@@ -70,6 +70,11 @@ app.use((req, res, next) => {
 
 app.use("/", indexRouter);
 
+// handle unknown routes
+app.use((req, res, next) => {
+  res.status(404).render("errorView", { errors: [{ msg: "Page not found" }] });
+});
+
 app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send(err.message);
 });

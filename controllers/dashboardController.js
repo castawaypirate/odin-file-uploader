@@ -8,7 +8,7 @@ export const getDashboardView = [
       where: {
         name: "/",
         parentFolderId: null,
-        userId: req.userId,
+        userId: req.user.id,
         deletedAt: null,
       },
       include: {

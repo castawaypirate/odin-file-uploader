@@ -24,7 +24,7 @@ export const getFolderCreateForm = [
       const parentFolder = await prisma.folder.findFirst({
         where: {
           id: parentFolderId,
-          userId: req.userId,
+          userId: req.user.id,
           deletedAt: null,
         },
       });
@@ -402,6 +402,7 @@ export const deleteFolder = [
 ];
 
 export const getShareFolderLinks = [
+  isAuth,
   validateFolderParams,
   async (req, res) => {
     const errors = validationResult(req);
@@ -414,7 +415,7 @@ export const getShareFolderLinks = [
     const folder = await prisma.folder.findFirst({
       where: {
         id: folderId,
-        userId: req.userId,
+        userId: req.user.id,
         deletedAt: null,
       },
       include: {
@@ -435,6 +436,7 @@ export const getShareFolderLinks = [
 ];
 
 export const generateShareLink = [
+  isAuth,
   validateFolderParams,
   validateShareExpiration,
   async (req, res) => {
@@ -448,7 +450,7 @@ export const generateShareLink = [
     const folder = await prisma.folder.findFirst({
       where: {
         id: data.id,
-        userId: req.userId,
+        userId: req.user.id,
         deletedAt: null,
       },
     });

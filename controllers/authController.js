@@ -18,7 +18,7 @@ export async function getLoginForm(req, res) {
 
 export const createUser = [
   validateRegister,
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -45,7 +45,7 @@ export const createUser = [
       if (!err) {
         return res.redirect("/dashboard");
       } else {
-        throw new Error(err);
+        next(err);
       }
     });
   },

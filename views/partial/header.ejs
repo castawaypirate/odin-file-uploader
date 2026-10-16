@@ -1,19 +1,24 @@
-<header>
-  <div>
-    <% if (locals.currentUser) {%>
+<header class="site-header">
+  <% if (locals.currentUser) { %>
+    <div class="header-left">
       <a href="/dashboard">Dashboard</a>
-    <%} else {%>
-      <a href="/">Home</a>
-    <%}%>
-  </div>
-  <div>
-    <% if (locals.currentUser) {%>
+      <span>|</span>
       <a href="/share/links">Shares</a>
-      <div>Hello, <%=currentUser.username%></div>
-      <a href="/logout">Logout</a>
-    <%} else {%>
+    </div>
+    <div class="header-right">
+      <span id="header-user"><strong><%= currentUser.username %></strong></span>
+      <form action="/logout" method="POST">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  <% } else { %>
+    <div class="header-left">
+      <a href="/">Home</a>
+    </div>
+    <div class="header-right">
       <a href="/login">Login</a>
+      <span>|</span>
       <a href="/register">Register</a>
-    <%}%>
-  </div>
+    </div>
+  <% } %>
 </header>
