@@ -1,6 +1,4 @@
 # backlog
-- handle unknown routes
-- shared folder (share folder form, shared folder view with files and subfolders, shared folders list - when user presses again share on an already shared folder what then?we create a new one because it may serve a different purpose - Extend and Revoke shared link from shared folders list)
 - styles
 - redirect login/register/home to dashboard when logged in
 - add loading indication when file is being uploaded (optional)
@@ -10,6 +8,8 @@
 - bulk download many files or many folders (optional)
 
 # done
+- handle unknown routes
+- shared folder (share folder form, shared folder view with files and subfolders, shared folders list - when user presses again share on an already shared folder what then?we create a new one because it may serve a different purpose - Update expiration and Revoke shared link from shared folders list)
 - soft delete file and bulk delete files when folder is deleted with cron job (make sure soft deleted files dont appear anywhere - soft delete only for the folder and bulk file deletion operations and not individual files)
 - upload file (cloudinary)
 - delete file (cloudinary)
@@ -39,6 +39,7 @@
 - [14/10] create share links + shared folder view
 - [15/10] navigate to subfolders of shared folder + download shared file from shared folder or from its subfolders
 - [16/10] share links view + extend + revoke
+- [17/10] code review issues + some styles
 
 # takeaways
 - [28/9]: 
@@ -116,6 +117,14 @@
     - all file routes should be authenticated and share routes should be unauthenticated but should check connection between share token and files, folder or subfolders id
     - uuids starting with digit are invalid for querySelector
     - in prisma you can use where inside include on one-to-many relations (because filtering a list can safely return an empty array) - you cannot use where inside inlcude on a required many-to-one relation (like shareLink's single folder) and you have to put that filter in the top level 
+- [16/10]:
+    - for security reasons you can't use get for logout (I used a post form with only on button and this is fine if you don't want to use fetch)
+    - for content disposition in order to not get weird filename (with "" in it for example) I used an npm package called content-disposition
+    - hard validate context for fileController functions because it is used in prisma functions
+    - use validator package (without install) to check isUUID() for example
+    - in client side if you do window.alert() but controlelr function waiting for something better use a simple return after the window.alert()
+    - Number(bytes) to convert BigInt to number in order not to get TypeError from functions or operations later
+
 
 
 
