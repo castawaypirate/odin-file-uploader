@@ -1,0 +1,33 @@
+.home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  max-width: 48rem; /* 768px container */
+  margin: 0 auto;
+}
+
+.home-title {
+  font-family: var(--font-body);
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-bold);
+  font-style: normal;
+  line-height: 1.15;
+  letter-spacing: -0.03em; /* Tight tracking makes large headings look sharp */
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  text-wrap: balance; /* Prevents a single orphan word on the last line */
+}
+
+.home-description {
+  font-family: var(--font-body);
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-regular);
+  font-style: normal;
+  line-height: 1.65;
+  color: var(--text-muted);
+  max-width: 58ch; /* Ideal reading width (55-65 characters per line) */
+  margin: 0 0 2rem 0;
+  text-wrap: pretty;
+}

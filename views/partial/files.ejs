@@ -1,22 +1,30 @@
 <h3>Files</h3>
-<dialog id="delete-file-dialog">
-  <form method="POST">
-    <p>Are you sure?</p>
-    <button commandfor="delete-file-dialog" type="submit">Delete</button>
-    <button commandfor="delete-file-dialog" command="close" type="button">Cancel</button>
+<dialog id="delete-file-dialog" class="modal-dialog">
+  <form method="POST" class="dialog-form">
+    <p class="dialog-title">Delete File</p>
+    <p class="dialog-desc">Are you sure you want to permanently delete this file?</p>
+    <div class="dialog-actions">
+      <button commandfor="delete-file-dialog" type="submit" class="btn-delete">Delete</button>
+      <button commandfor="delete-file-dialog" command="close" type="button" class="btn-cancel">Cancel</button>
+    </div>
   </form>
 </dialog>
-<dialog id="edit-file-dialog">
-  <form method="POST">
+
+<dialog id="edit-file-dialog" class="modal-dialog">
+  <form method="POST" class="dialog-form">
+    <p class="dialog-title">Edit File</p>
     <div class="form-control">
       <label for="filename">Name</label>
-      <input type="text" id="filename" name="filename">
+      <input type="text" id="filename" name="filename" required>
     </div>
-    <button commandfor="edit-file-dialog" type="submit">Update</button>
-    <button commandfor="edit-file-dialog" command="close" type="button">Cancel</button>
+    <div class="dialog-actions">
+      <button commandfor="edit-file-dialog" type="submit" class="btn-primary">Update</button>
+      <button commandfor="edit-file-dialog" command="close" type="button" class="btn-cancel">Cancel</button>
+    </div>
   </form>
 </dialog>
-<ul>
+
+<ul class="item-list">
   <% if (files && files.length > 0) {%>
     <% for (let file of files) {%>
       <li>

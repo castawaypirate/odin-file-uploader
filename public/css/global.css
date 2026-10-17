@@ -1,0 +1,142 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+  /* Fonts */
+  --font-body: "Inter", sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
+  /* Sizes */
+  --fs-sm: 0.875rem; /* 14px - nav, buttons, labels */
+  --fs-base: 1rem; /* 16px - body & inputs */
+  --fs-lg: 1.25rem; /* 20px - card titles & logo */
+  --fs-hero: clamp(2rem, 4vw + 1rem, 3.25rem);
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+
+  /* Colors */
+  --bg-primary: #f8fafc;
+  --bg-surface: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-danger: #dc2626;
+  --bg-danger-subtle: #fef2f2;
+
+  /* UI */
+  --radius: 0.5rem;
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  padding: 0.5rem 0.5rem;
+
+  a,
+  button {
+    all: unset;
+  }
+
+  a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+}
+
+.error-list {
+  font-size: var(--fs-sm);
+  color: var(--color-danger);
+  background-color: var(--bg-danger-subtle);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  margin: 0;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  font-size: var(--fs-sm);
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem; /* Tight, clean spacing around the | divider */
+}
+
+.site-header a,
+.site-header button {
+  font-family: inherit;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.site-header a:hover,
+.site-header button:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.site-header span {
+  color: var(--border-color); /* Subtle divider pipe */
+  user-select: none;
+}
+
+.site-header form {
+  margin: 0;
+  display: flex;
+}
+
+#header-user {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(
+    --text-primary
+  ); /* Bold, readable dark text instead of faint grey */
+  line-height: 1;
+}

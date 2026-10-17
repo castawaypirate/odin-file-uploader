@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register</title>
-    <!-- <link href="/css/form.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/auth.css">
   </head>
   <body>
     <%- include("partial/header.ejs") %>
     <div class="content">
       <form action="/register" method="POST">
-      <%- include("partial/errors.ejs") %>
+        <div class="auth-header">
+          <h1 class="auth-title">Create an account</h1>
+        </div>
+        <%- include("partial/errors.ejs") %>
         <div class="form-control">
           <label for="username">Username</label>
           <input type="text" name="username" id="username" value="<%=locals.user ? user.username : ''%>">
@@ -24,6 +28,9 @@
           <input type="password" name="confirm" id="confirm" value="">
         </div>
         <button type="submit">Register</button>
+        <p class="auth-footer">
+          Already have an account? <a href="/login">Log in</a>
+        </p>
       </form>
     </div>
   </body>
