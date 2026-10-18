@@ -1,5 +1,5 @@
 # backlog
-- styles
+- check txt upload
 - redirect login/register/home to dashboard when logged in
 - add loading indication when file is being uploaded (optional)
 - move file (optional)
@@ -8,6 +8,7 @@
 - bulk download many files or many folders (optional)
 
 # done
+- styles
 - handle unknown routes
 - shared folder (share folder form, shared folder view with files and subfolders, shared folders list - when user presses again share on an already shared folder what then?we create a new one because it may serve a different purpose - Update expiration and Revoke shared link from shared folders list)
 - soft delete file and bulk delete files when folder is deleted with cron job (make sure soft deleted files dont appear anywhere - soft delete only for the folder and bulk file deletion operations and not individual files)
@@ -127,6 +128,8 @@
     - Number(bytes) to convert BigInt to number in order not to get TypeError from functions or operations later
 - [17/10]:
     - pipe() does not automatically destroy the destincation stream and can lead to memory leaks or hanging file streams - pipeline() automatically handles error fowarding and cleans up all streams if a single piece fails
+- [18/10]:
+    - deployment as usual with neon and render - had to add to the build command: npm install && npx prisma generate && npx primsa migrate deploy
 
 
 
