@@ -40,6 +40,7 @@
 - [15/10] navigate to subfolders of shared folder + download shared file from shared folder or from its subfolders
 - [16/10] share links view + extend + revoke
 - [17/10] code review issues + some styles
+- [18/10] finish styles + deploy
 
 # takeaways
 - [28/9]: 
@@ -124,6 +125,8 @@
     - use validator package (without install) to check isUUID() for example
     - in client side if you do window.alert() but controlelr function waiting for something better use a simple return after the window.alert()
     - Number(bytes) to convert BigInt to number in order not to get TypeError from functions or operations later
+- [17/10]:
+    - pipe() does not automatically destroy the destincation stream and can lead to memory leaks or hanging file streams - pipeline() automatically handles error fowarding and cleans up all streams if a single piece fails
 
 
 
