@@ -1,0 +1,94 @@
+.path {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.path a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+}
+
+.path a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.path span {
+  color: var(--border-color);
+}
+
+/* Current Folder Action Toolbar */
+.folder-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Button Variants for the Toolbar */
+.folder-actions a,
+.folder-actions button {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+/* Primary Black Button (New subfolder) */
+.folder-actions .btn-black {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+}
+
+.folder-actions .btn-black:hover {
+  opacity: 0.85;
+}
+
+.btn-black:active {
+  transform: scale(0.98);
+}
+
+/* Outline Buttons (Edit, Share) */
+.folder-actions .btn-outline {
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.folder-actions .btn-outline:hover {
+  background-color: var(--bg-primary);
+  border-color: #cbd5e1;
+}
+
+.btn-outline:active {
+  transform: scale(0.98);
+}
+
+/* Danger Subtle Button (Delete) */
+.folder-actions .btn-danger-subtle {
+  background-color: var(--bg-danger-subtle);
+  color: var(--color-danger);
+  border: 1px solid var(--border-color);
+}
+
+.folder-actions .btn-danger-subtle:hover {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}

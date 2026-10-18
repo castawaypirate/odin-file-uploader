@@ -10,12 +10,12 @@
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
+    <main class="content">
       <h1>Root Vault</h1>
       <a href="/folders/new">New folder</a>
       <%- include("partial/folders.ejs", {subfolders: locals.root?.subfolders}) %>
       <%- include("partial/files.ejs", {files: locals.root?.files, context: "root"}) %>
       <%- include("partial/uploadForm.ejs", {context: "root"}) %>
-    </div>
+    </main>
   </body>
 </html>

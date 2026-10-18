@@ -3,44 +3,59 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/shareFolderLinks.css">
     <script src="/js/clipboard.js" defer></script>
-    <title>Share</title>
+    <title>Share Folder</title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
-      <%if (locals.folder.shareLinks.length > 0) {%>
-       <h1>Existing links</h1>
-       <%for (let link of folder.shareLinks) {%>
-        <div>
-        <input type="text" id="<%=link.id%>" value="<%=url%>/share/<%=link.token%>" onclick="this.select() "readonly>
-          <div>
-            <% if (link.expiresAt) {%>
-              <%=link.expiresAt%>
-            <%} else {%>
-              No expiration date
-            <%} %>
+    <main class="content">
+      <div class="path">
+        <a href="/folders/<%= locals.folder?.id %>">&larr; Back to folder</a>
+      </div>
+
+      <% if (locals.folder?.shareLinks && folder.shareLinks.length > 0) { %>
+        <h3>Existing links</h3>
+        <ul class="item-list">
+          <% for (let link of folder.shareLinks) { %>
+            <li>
+              <input type="text" id="<%= link.id %>" value="<%= url %>/share/<%= link.token %>" onclick="this.select()" readonly class="share-input">
+              <span class="share-expiry">
+                <% if (link.expiresAt) { %>
+                  Expires: <%= new Date(link.expiresAt).toLocaleDateString() %>
+                <% } else { %>
+                  Never expires
+                <% } %>
+              </span>
+              <div class="share-actions">
+                <button type="button"><a href="<%= url %>/share/<%= link.token %>">View</a></button>
+                <button type="button" onclick="copyLink('<%= link.id %>')">Copy</button>
+              </div>
+            </li>
+          <% } %>
+        </ul>
+      <% } %>
+
+      <h3>Create new link</h3>
+      <div class="share-card-wrapper">
+        <form action="/folders/<%= locals.folder.id %>/share" method="POST" class="share-form">
+          <div class="share-form-row">
+            <div class="form-control">
+              <label for="expiration">Expiration</label>
+              <select id="expiration" name="expiration">
+                <option value="1d">1 day</option>
+                <option value="7d">7 days</option>
+                <option value="30d">30 days</option>
+                <option value="never">Never</option>
+              </select>
+            </div>
+
+            <button type="submit">Generate link</button>
           </div>
-          <div>
-            <button type="button"><a href="<%=url%>/share/<%=link.token%>">View</a></button> 
-            <button type="button" onclick="copyLink('<%=link.id%>')" >Copy</button> 
-          </div>
-        </div>
-        <%}%>
-      <%}%>
-      <h1>Share folder</h1>
-      <form action="/folders/<%=locals.folder.id%>/share" method="POST">
-        <div class="form-control">
-          <label for="expiration">Link expiration</label>
-          <select id="expiration" name="expiration">
-            <option value="1d">1 day</option>
-            <option value="7d">7 days</option>
-            <option value="30d">30 days</option>
-            <option value="never">Never</option>
-          </select>
-        </div>
-        <button type="submit">Generate link</button>
-      </form>
-    </div>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

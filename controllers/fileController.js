@@ -316,7 +316,7 @@ export const getFileDetails = [
     }
 
     file.size = formatBytes(Number(file.size));
-    file.uploadedAt = format(new Date(file.uploadedAt), "dd-MM-yyyy");
+    // file.uploadedAt = format(new Date(file.uploadedAt), "dd-MM-yyyy");
 
     return res.render("fileDetailsView", { file: file });
   },

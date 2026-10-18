@@ -3,29 +3,37 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/folderView.css">
     <script src="/js/folderView.js" defer></script>
-    <title><%=locals.folder?.name%></title>
+    <title><%= locals.folder?.name %></title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
-      <div class="path">
+    <main class="content">
+      <nav class="path">
         <a href="/dashboard">~</a>
-        <% if (locals.path) {%>
-          <%for (let folder of path) {%>
+        <% if (locals.path) { %>
+          <% for (let folder of path) { %>
             <span>/</span>
-            <a href="/folders/<%=folder.id%>"><%=folder.name%></a>
-          <%}%>
-        <%}%>
+            <a href="/folders/<%= folder.id %>"><%= folder.name %></a>
+          <% } %>
+        <% } %>
+      </nav>
+
+      <h1><%= locals.folder?.name %></h1>
+
+      <div class="folder-actions">
+        <a href="/folders/new?parentFolderId=<%= locals.folder?.id %>" class="btn-black">New subfolder</a>
+        <a href="/folders/edit/<%= locals.folder?.id %>?context=current" class="btn-outline">Edit</a>
+        <a href="/folders/<%= locals.folder?.id %>/share" class="btn-outline">Share</a>
+        <button type="button" data-id="<%= locals.folder?.id %>" id="delete-current-folder-btn" class="btn-danger-subtle">Delete</button>
       </div>
-      <h2><%=locals.folder?.name%></h2>
-      <a href="/folders/new?parentFolderId=<%=locals.folder?.id%>">New subfolder</a>
-      <a href="/folders/edit/<%=locals.folder?.id%>?context=current">Edit</a>
-      <button><a href="/folders/<%=locals.folder?.id%>/share">Share</a></button>
-      <button type="button" data-id="<%=locals.folder?.id%>" id="delete-current-folder-btn">Delete</button>
+
       <%- include("partial/folders.ejs", {subfolders: locals.folder?.subfolders}) %>
       <%- include("partial/files.ejs", {files: locals.folder?.files, context: locals.folder?.id}) %>
       <%- include("partial/uploadForm.ejs", {context: locals.folder?.id}) %>
-    </div>
+    </main>
   </body>
 </html>

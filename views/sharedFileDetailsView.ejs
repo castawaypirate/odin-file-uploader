@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>File details</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/fileDetailsView.css">
+    <title><%= locals.file?.filename || 'File details' %></title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
-      <div class="folder">
-      <a href="/share/<%=locals.token%>/folders/<%=locals.folderId%>">
-        Back to folder
-      </a>
+    <main class="content">
+      <div class="path">
+        <a href="/share/<%= locals.token %>/folders/<%= locals.folderId %>">&larr; Back to folder</a>
       </div>
-      <h3><%=locals.file?.filename%></h3>
-      <div><%=locals.file?.uploadedAt%></div>
-      <div><%=locals.file?.size%></div>
-    </div>
+
+      <div class="file-card">
+        <div class="file-card-header">
+          <h1 class="file-title"><%= locals.file?.filename %></h1>
+        </div>
+
+        <div class="file-meta">
+          <div class="meta-item">
+            <span class="meta-label">Uploaded</span>
+            <span class="meta-value"><%= locals.file?.uploadedAt ? new Date(file.uploadedAt).toLocaleDateString() : '' %></span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Size</span>
+            <span class="meta-value font-mono"><%= locals.file?.size %></span>
+          </div>
+        </div>
+
+      </div>
+    </main>
   </body>
 </html>

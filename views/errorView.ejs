@@ -3,16 +3,36 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/errorView.css">
     <title>Error</title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
-      <% for (let error of locals.errors) { %>
-      <div>
-         <%=error.msg%> 
+    <main class="content">
+      <div class="path">
+        <% if (locals.currentUser) {%>
+          <a href="/dashboard">&larr; Back to dashboard</a>
+        <% } else { %>
+          <a href="/">&larr; Back to home</a>
+        <% } %>
       </div>
-      <%}%>
-    </div>
+
+      <div class="error-container">
+        <div class="error-card">
+          <div class="error-header">
+            <h1 class="error-title">An error occurred</h1>
+          </div>
+
+          <% if (locals.errors && errors.length > 0) { %>
+            <ul class="error-list" role="alert">
+              <% errors.forEach((error) => { %>
+                <li><%= error.msg %></li>
+              <% }); %>
+            </ul>
+          <% } %>
+        </div>
+      </div>
+    </main>
   </body>
 </html>

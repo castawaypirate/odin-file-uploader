@@ -1,0 +1,94 @@
+/* Main Container Override */
+.content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page Title */
+.content h1 {
+  font-size: 1.75rem;
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  margin: 0 0 1rem 0;
+}
+
+/* Empty State Text */
+.empty-text {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Share Link Row Adjustments */
+.item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.item-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.85rem;
+}
+
+.share-folder-link {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.share-folder-link:hover {
+  text-decoration: underline;
+}
+
+.share-expiry {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.share-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* Row Action Buttons */
+.item-list li button {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.item-list li button:hover {
+  background-color: var(--border-color);
+}
+
+/* Specific Revoke Button Style (Subtle Red) */
+.item-list li .revoke-share-link-btn {
+  color: var(--color-danger);
+  border-color: var(--bg-danger-subtle);
+  background-color: var(--bg-danger-subtle);
+}
+
+.item-list li .revoke-share-link-btn:hover {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #991b1b;
+}

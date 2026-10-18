@@ -1,0 +1,82 @@
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 4.5rem);
+  padding: 2rem 1rem;
+}
+
+.content form {
+  width: 100%;
+  max-width: 20rem; /* 320px */
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.folder-form-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.folder-form-title {
+  font-family: var(--font-body);
+  font-size: 1.5rem; /* 24px */
+  font-weight: var(--fw-bold);
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-control label {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--text-primary);
+}
+
+.form-control input {
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.3rem 0.2rem;
+}
+
+.content form button[type="submit"] {
+  margin-top: 0.25rem;
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  color: #ffffff;
+  background-color: #000;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  padding: 0.45rem 0.3rem;
+  transition:
+    opacity 0.15s ease,
+    transform 0.05s ease;
+}
+
+.content form button[type="submit"]:hover {
+  opacity: 0.85;
+}
+
+.content form button[type="submit"]:active {
+  transform: scale(0.98);
+}

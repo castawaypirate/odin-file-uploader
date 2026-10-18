@@ -1,0 +1,23 @@
+.path {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.path a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: var(--fw-medium);
+}
+
+.path a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.path span {
+  color: var(--border-color);
+}

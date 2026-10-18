@@ -3,45 +3,53 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%=locals.folder?.name%></title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/sharedFolderView.css">
+    <title><%= locals.folder?.name %></title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
-    <div class="content">
-      <div class="path">
-          <%for (let i=0;i<path.length;i++) {%>
-            <a href="/share/<%=token%>/folders/<%=path[i].id%>"><%=path[i].name%></a>
-            <%if (i!==path.length-1) {%>
-              <span>/</span>
-            <%}%>
-          <%}%>
-      </div>
-      <h2><%=locals.folder?.name%></h2>
+    <main class="content">
+      <nav class="path">
+        <% for (let i = 0; i < path.length; i++) { %>
+          <a href="/share/<%= token %>/folders/<%= path[i].id %>"><%= path[i].name %></a>
+          <% if (i !== path.length - 1) { %>
+            <span>/</span>
+          <% } %>
+        <% } %>
+      </nav>
+
+      <h1><%= locals.folder?.name %></h1>
+
       <h3>Folders</h3>
-      <ul>
-        <% if (folder?.subfolders && folder?.subfolders.length > 0) {%>
-          <% for (let fold of folder.subfolders) {%>
+      <ul class="item-list">
+        <% if (folder?.subfolders && folder?.subfolders.length > 0) { %>
+          <% for (let fold of folder.subfolders) { %>
             <li>
-              <a href="/share/<%=token%>/folders/<%=fold.id%>"><%=fold.name%></a>
+              <a href="/share/<%= token %>/folders/<%= fold.id %>"><%= fold.name %></a>
             </li>
-          <%}%>
-        <%} else {%>
+          <% } %>
+        <% } else { %>
           <p>No subfolders yet</p>
-        <%}%>
+        <% } %>
       </ul>
+
       <h3>Files</h3>
-      <ul>
-        <% if (folder?.files && folder?.files.length > 0) {%>
-          <% for (let file of folder.files) {%>
+      <ul class="item-list">
+        <% if (folder?.files && folder?.files.length > 0) { %>
+          <% for (let file of folder.files) { %>
             <li>
-              <a href="/share/<%=token%>/files/<%=file.id%>"><%=file.filename%></a>
-              <button class="download-file-btn" type="button"><a href="/share/<%=token%>/download/<%=file.id%>">Download</a></button>
+              <a href="/share/<%= token %>/files/<%= file.id %>"><%= file.filename %></a>
+              <button class="download-file-btn" type="button">
+                <a href="/share/<%= token %>/download/<%= file.id %>">Download</a>
+              </button>
             </li>
-          <%}%>
-        <%} else {%>
+          <% } %>
+        <% } else { %>
           <p>No uploaded files yet in this folder</p>
-        <%}%>
+        <% } %>
       </ul>
-    </div>
+    </main>
   </body>
 </html>

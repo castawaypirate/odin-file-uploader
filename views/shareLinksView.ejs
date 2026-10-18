@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="/js/shareLinksView.js" defer></script>
-  <title>Share links</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="/css/shareLinksView.css">
+    <script src="/js/shareLinksView.js" defer></script>
+    <title>Share links</title>
   </head>
   <body>
     <%- include("partial/header.ejs") %>
 
-    <dialog id="update-share-link-dialog">
-      <form method="POST">
+    <dialog id="update-share-link-dialog" class="modal-dialog">
+      <form method="POST" class="dialog-form">
+        <p class="dialog-title">Update Expiration</p>
         <div class="form-control">
           <label for="expiration">Link expiration</label>
           <select id="expiration" name="expiration">
@@ -20,30 +24,38 @@
             <option value="never">Never</option>
           </select>
         </div>
-        <button commandfor="update-share-link-dialog" type="submit">Update</button>
-        <button commandfor="update-share-link-dialog" command="close" type="button">Cancel</button>
+        <div class="dialog-actions">
+          <button commandfor="update-share-link-dialog" type="submit" class="btn-primary">Update</button>
+          <button commandfor="update-share-link-dialog" command="close" type="button" class="btn-cancel">Cancel</button>
+        </div>
       </form>
     </dialog>
 
-    <div class="content">
-      <% if (locals.links?.length > 0) {%>
-        <% for (let link of links) {%>
-          <div>
-            <a href="/share/<%=link.token%>"><%=link.folder.name%></a>
-            <div>
-              <% if (link.expiresAt) {%>
-                <%=link.expiresAt%>
-              <%} else {%>
-                No expiration date
-              <%} %>
-            </div>
-            <button data-token="<%=link.token%>" class="update-share-link-btn">Update Expiration</button>
-            <button data-token="<%=link.token%>" class="revoke-share-link-btn">Revoke</button>
-          </div>
-        <%}%>
-      <%} else {%>
-        <p>No active share links found</p>
-      <%}%>
-    </div>
+    <main class="content">
+      <h1>Share links</h1>
+
+      <% if (locals.links?.length > 0) { %>
+        <ul class="item-list">
+          <% for (let link of links) { %>
+            <li>
+              <a href="/share/<%= link.token %>" class="share-folder-link"><%= link.folder.name %></a>
+              <span class="share-expiry">
+                <% if (link.expiresAt) { %>
+                  Expires: <%= new Date(link.expiresAt).toLocaleDateString() %>
+                <% } else { %>
+                  No expiration date
+                <% } %>
+              </span>
+              <div class="share-actions">
+                <button type="button" data-token="<%= link.token %>" class="update-share-link-btn">Update</button>
+                <button type="button" data-token="<%= link.token %>" class="revoke-share-link-btn">Revoke</button>
+              </div>
+            </li>
+          <% } %>
+        </ul>
+      <% } else { %>
+        <p class="empty-text">No active share links found</p>
+      <% } %>
+    </main>
   </body>
 </html>
