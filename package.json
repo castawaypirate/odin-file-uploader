@@ -12,7 +12,6 @@
     "md": "node scripts/generate-md.mjs"
   },
   "dependencies": {
-    "prisma": "^7.10.0",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "@prisma/client-runtime-utils": "^7.10.0",
@@ -34,6 +33,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pg": "^8.23.0",
+    "prisma": "^7.10.0",
     "serve-favicon": "^2.5.1"
   }
 }
